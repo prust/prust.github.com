@@ -7,7 +7,7 @@ author: prust
 
 I've always stayed away from multi-line strings, but didn't realize until today that they aren't part of the ECMAScript standard:
 
-```
+```javascript
 var str = 'this is a long string, \
            that is two lines long.';
 ```
@@ -23,21 +23,21 @@ As [Google's styleguide says](http://google-styleguide.googlecode.com/svn/trunk/
 
 Over the years, I've gravitated toward using simple string concatenation when I don't care about preserving newlines:
 
-```
+```javascript
 var str = 'this is a long string, ' +
           'that is two lines long.';
 ```
 
 and array joining when I do want newlines:
 
-```
+```javascript
 var str = ['this is a long string, ',
            'that is two lines long.'].join('\n');
 ```
 
 Neither is pretty, but we don't get true multi-line strings until ECMAScript 6:
 
-```
+```javascript
 var str = `this is a long string, 
            that is two lines long.`;
 ```
