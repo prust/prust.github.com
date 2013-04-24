@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Small and Sharp</title>
+    <title>{{ page.title }}</title>
     <link rel="stylesheet" href="/stylesheets/styles.css">
     <link rel="stylesheet" href="/stylesheets/pygment_trac.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -27,17 +27,7 @@
 
     <div class="wrapper">
 
-      <section>
-        <div id="title">
-          <h1>Cornerstone Dev Blog</h1>
-          <p>Small and Sharp</p>
-          <hr>
-          <span class="credits left">Blog maintained by <a href="https://github.com/prust">Peter Rust</a> and <a href="https://github.com/michaelsmitha">Michael Smith</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
-        </div>
-
-        {{ content }}
-      </section>
+      {{ content }}
 
     </div>
     <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->

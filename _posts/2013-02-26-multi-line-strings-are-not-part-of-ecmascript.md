@@ -1,7 +1,10 @@
 ---
 title: Multi-line strings are not part of ECMAScript
-tags: Javascript
+layout: default
+tags: [Javascript]
 ---
+
+# {{ page.title }}
 
 I've always stayed away from multi-line strings, but didn't realize until today that they aren't part of the ECMAScript standard:
 
