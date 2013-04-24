@@ -647,6 +647,12 @@ code {
   border-radius: 2px;
 }
 
+p code {
+  color: #ccc;
+  border: 1px solid #444;
+  background-color: #333;
+}
+
 pre {
   padding: 8px 15px;
   background: #191919;
