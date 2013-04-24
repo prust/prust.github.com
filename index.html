@@ -4,15 +4,5 @@ title: Small and Sharp
 ---
 
 {% for page in site.posts %}
-<article>
-  <section>
-    <div id="title">
-      <h1><a href="{{ page.url }}">{{ page.title }}</a></h1>
-      <p>{{ page.date | date_to_string }}</p>
-      <hr>
-      <span class="credits left">{{ page.tags }}</span><span class="credits right">by <a href="https://github.com/{{ page.author }}">@{{ page.author }}</a></span>
-    </div>
-    {{ page.content }}
-  </section>
-</article>
+{% include post.html %}
 {% endfor %}
