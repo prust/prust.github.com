@@ -651,6 +651,7 @@ p code {
   color: #ccc;
   border: 1px solid #444;
   background-color: #333;
+  padding: 1px 6px;
 }
 
 pre {
