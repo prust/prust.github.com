@@ -2,9 +2,8 @@
 title: Multi-line strings are not part of ECMAScript
 layout: post
 tags: [Javascript]
+author: prust
 ---
-
-# {{ page.title }}
 
 I've always stayed away from multi-line strings, but didn't realize until today that they aren't part of the ECMAScript standard:
 

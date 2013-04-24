@@ -4,13 +4,13 @@ title: Small and Sharp
 ---
 
 {% for post in site.posts %}
-  <section>
+  <article>
     <div id="title">
       <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
       <p>{{ post.date | date_to_string }}</p>
       <hr>
-      <span class="credits right">by <a href="https://github.com/prust">Peter Rust</a></span>
+      <span class="credits right">by <a href="https://github.com/{{ page.author }}">@{{ page.author }}</a></span>
     </div>
-    {{ post.content }}
-  </section>
+    <section>{{ post.content }}</section>
+  </article>
 {% endfor %}
