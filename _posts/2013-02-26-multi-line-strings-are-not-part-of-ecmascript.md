@@ -1,6 +1,6 @@
 ---
 title: Multi-line strings are not part of ECMAScript
-layout: default
+layout: post
 tags: [Javascript]
 ---
 
