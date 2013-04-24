@@ -1,14 +1,13 @@
 ---
 layout: default
-title: Small and Sharp
 ---
 
 <section>
   <div id="title">
-    <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
-    <p>{{ post.date | date_to_string }}</p>
+    <h1><a href="{{ post.url }}">{{ page.title }}</a></h1>
+    <p>{{ page.date | date_to_string }}</p>
     <hr>
     <span class="credits right">by <a href="https://github.com/prust">Peter Rust</a></span>
   </div>
-  {{ post.content }}
+  {{ content }}
 </section>
