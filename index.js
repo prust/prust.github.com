@@ -100,7 +100,6 @@ hr {
   background-color: #ccc;
 }
 #header {
-  text-align: right;
   background-color: #eee;
   color: #999;
   padding: 5px 1em;
@@ -113,6 +112,11 @@ hr {
 #header a:hover {
   text-decoration: underline;
 }
+#header .pull-right {
+  float: right;
+  margin-top: -2px;
+}
+
 div.date {
   font-style: italic;
   color: #999;
@@ -144,7 +148,7 @@ blockquote p {
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
-  <div id="header"><a href="/">Peter Rust's Dev Blog</a></div>`;
+  <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div>`;
 }
 
 function genPostBody(meta, html, opts) {

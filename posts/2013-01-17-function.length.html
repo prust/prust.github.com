@@ -45,7 +45,6 @@ hr {
   background-color: #ccc;
 }
 #header {
-  text-align: right;
   background-color: #eee;
   color: #999;
   padding: 5px 1em;
@@ -58,6 +57,11 @@ hr {
 #header a:hover {
   text-decoration: underline;
 }
+#header .pull-right {
+  float: right;
+  margin-top: -2px;
+}
+
 div.date {
   font-style: italic;
   color: #999;
@@ -89,7 +93,7 @@ blockquote p {
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
-  <div id="header"><a href="/">Peter Rust's Dev Blog</a></div><article>
+  <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
     <h1><a href=posts/2013-01-17-function.length.html>Function.length</a></h1>
     <div class="date">Feb. 17, 2013</div>
     <p>Little did I know, but the <code>Function</code> prototype has a <code>length</code> property. This is how Backbone knows whether your <code>comparator</code> function should be treated like a <code>_.sortBy()</code> function (that takes a single argument) or an <code>Array.sort()</code> function (that takes two arguments). Perhaps this is also how mocha knows whether your tests take a <code>done</code> parameter. And here I had assumed they were using <code>Function.toString()</code> and parsing out the parameters, as Prototype&#39;s <a href="http://api.prototypejs.org/language/Function/prototype/argumentNames/">Function.argumentNames()</a> does.</p>
