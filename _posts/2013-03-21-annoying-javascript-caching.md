@@ -3,7 +3,6 @@ title: Annoying Javascript Caching
 tags: [Javascript, node]
 author: prust
 ---
-
 As our team has started to move from web-powered desktop apps to true web apps, we've been bit more than once by Chrome caching the javascript files.
 
 Once Chrome has cached your files, the simplest way I've found to force Chrome to get the latest of a particular file is to find it in the Network panel, right-click to open it in a new tab and hit Ctrl+F5.

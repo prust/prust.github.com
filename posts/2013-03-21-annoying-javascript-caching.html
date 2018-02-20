@@ -1,0 +1,105 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>Annoying Javascript Caching</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+}
+body {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 40em;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+}
+pre > code { color: #666 !important }
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin-bottom: 2px;
+}
+h1 a {
+  color: #666;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: underline;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  text-align: right;
+  background-color: #eee;
+  color: #999;
+  padding: 5px 1em;
+  border-bottom: 1px solid #ccc;
+}
+#header a {
+  color: #999;
+  text-decoration: none;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+div.date {
+  font-style: italic;
+  color: #999;
+}
+a.more {
+  margin-bottom: 1em;
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+  <div id="header"><a href="/">Peter Rust's Dev Blog</a></div><article>
+    <h1><a href=posts/2013-03-21-annoying-javascript-caching.html>Annoying Javascript Caching</a></h1>
+    <div class="date">Apr. 21, 2013</div>
+    <p>As our team has started to move from web-powered desktop apps to true web apps, we&#39;ve been bit more than once by Chrome caching the javascript files.</p>
+<p>Once Chrome has cached your files, the simplest way I&#39;ve found to force Chrome to get the latest of a particular file is to find it in the Network panel, right-click to open it in a new tab and hit Ctrl+F5.</p>
+<p>But it would be even better to tell Chrome to stop. And really, this isn&#39;t Chrome&#39;s fault. It&#39;s the server&#39;s fault, which is sending headers telling Chrome to cache the Javascript.</p>
+<p>If you&#39;re using node&#39;s <code>http-server</code>, the default is a cache header of 1 hour (don&#39;t ask me why). To drop the cache header to 10 seconds, you could send <code>-c10</code>, or to disable caching entirely, send <code>-c-1</code>:</p>
+<pre><code>http-server -c-1
+</code></pre><p>If you&#39;re using the <code>node-static</code> file server, you can turn off caching like this:</p>
+<pre><code class="lang-javascript">var fileServer = new static.Server(&#39;./public&#39;, {&#39;headers&#39;: {&#39;Cache-Control&#39;: &#39;no-cache, must-revalidate&#39;}});
+</code></pre>
+
+    
+  </article></body></html>

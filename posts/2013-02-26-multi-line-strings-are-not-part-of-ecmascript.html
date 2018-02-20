@@ -1,0 +1,121 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>Multi-line strings are not part of ECMAScript</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+}
+body {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 40em;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+}
+pre > code { color: #666 !important }
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin-bottom: 2px;
+}
+h1 a {
+  color: #666;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: underline;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  text-align: right;
+  background-color: #eee;
+  color: #999;
+  padding: 5px 1em;
+  border-bottom: 1px solid #ccc;
+}
+#header a {
+  color: #999;
+  text-decoration: none;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+div.date {
+  font-style: italic;
+  color: #999;
+}
+a.more {
+  margin-bottom: 1em;
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+  <div id="header"><a href="/">Peter Rust's Dev Blog</a></div><article>
+    <h1><a href=posts/2013-02-26-multi-line-strings-are-not-part-of-ecmascript.html>Multi-line strings are not part of ECMAScript</a></h1>
+    <div class="date">Mar. 26, 2013</div>
+    <p>I&#39;ve always stayed away from multi-line strings, but didn&#39;t realize until today that they aren&#39;t part of the ECMAScript standard:</p>
+<pre><code class="lang-javascript">var str = &#39;this is a long string, \
+           that is two lines long.&#39;;
+</code></pre>
+<p>It also never dawned on me what exactly the backslash is doing: it is escaping the newline in the source code!</p>
+<p>As <a href="http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml?showone=Multiline_string_literals#Multiline_string_literals">Google&#39;s styleguide says</a>:</p>
+<blockquote>
+<p>The whitespace at the beginning of each line
+can&#39;t be safely stripped at compile time;
+whitespace after the slash will result in tricky errors;
+and while most script engines support this, it is not part of ECMAScript.</p>
+</blockquote>
+<p>Over the years, I&#39;ve gravitated toward using simple string concatenation when I don&#39;t care about preserving newlines:</p>
+<pre><code class="lang-javascript">var str = &#39;this is a long string, &#39; +
+          &#39;that is two lines long.&#39;;
+</code></pre>
+<p>and array joining when I do want newlines:</p>
+<pre><code class="lang-javascript">var str = [&#39;this is a long string, &#39;,
+           &#39;that is two lines long.&#39;].join(&#39;\n&#39;);
+</code></pre>
+<p>Neither is pretty, but we don&#39;t get true multi-line strings until ECMAScript 6:</p>
+<pre><code class="lang-javascript">var str = `this is a long string, 
+           that is two lines long.`;
+</code></pre>
+
+    
+  </article></body></html>

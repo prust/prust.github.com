@@ -1,0 +1,112 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>Backbone Tips</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+}
+body {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 40em;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+}
+pre > code { color: #666 !important }
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin-bottom: 2px;
+}
+h1 a {
+  color: #666;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: underline;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  text-align: right;
+  background-color: #eee;
+  color: #999;
+  padding: 5px 1em;
+  border-bottom: 1px solid #ccc;
+}
+#header a {
+  color: #999;
+  text-decoration: none;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+div.date {
+  font-style: italic;
+  color: #999;
+}
+a.more {
+  margin-bottom: 1em;
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+  <div id="header"><a href="/">Peter Rust's Dev Blog</a></div><article>
+    <h1><a href=posts/2013-01-17-backbone-tips.html>Backbone Tips</a></h1>
+    <div class="date">Feb. 17, 2013</div>
+    <p>A team member asked me for some Backbone tips and, while I don&#39;t profess to be a Backbone guru yet, I have been around the block with Backbone a few times and thought it would be beneficial to share some things I&#39;ve learned.  Please, take what follows with a grain of salt and correct me where you think differently.</p>
+<h1 id="keep-the-view-self-contained-isolated-to-the-view-s-element">Keep the view self-contained &amp; isolated to the view’s element</h1>
+<p>One recommendation off the top would be to let Backbone’s base view class create the view’s element for you – you can parameterize the tagName and className and add attributes to it in the constructor – and to constrain all DOM event-handlers and selector queries to within that element (via the jquery-wrapped reference, <code>this.$el</code>, and a declarative <code>events</code> dictionary). The new <code>listenTo()</code> and <code>stoplistening()</code> handlers (added in 0.9.9) are preferable over the <code>.on()</code>/<code>.off()</code> because they unbind the events automatically for you on <code>remove()</code>.</p>
+<h1 id="relationships-associations">Relationships / Associations</h1>
+<p>If you need to work with relationships between models (like you would with data from a relational database) and needing to ensure that there is never more than one model object that represents a DB record, I would recommend using <a href="http://pathable.github.com/supermodel/">Supermodel.js</a> (or possibly <a href="https://github.com/dhruvaray/backbone-associations">backbone-associations</a>).</p>
+<h1 id="subcutaneous-testing">Subcutaneous Testing</h1>
+<p>Writing tests of the view layer that need to find things in the DOM and trigger DOM events can take a lot of developer time and is also an order of magnitude slower than unit tests that don’t involve the DOM (whether it’s the real DOM in a browser or the jsdom simulation in node). So we’ve been toying with the idea of doing what Martin Fowler calls “Subcutaneous testing” – testing everything but the thin outer “skin” via an M-V-VM pattern (Model – View – ViewModel), where the ViewModel or “Presentation Model” contains all presentation logic (but no DOM code) and has a very thin layer of generic code on top of it that keeps it in sync with a DOM template (perhaps <a href="http://rivetsjs.com/">rivets</a> or <a href="https://github.com/flatiron/plates">plates</a>).</p>
+<h1 id="use-backbone-sync-or-write-a-pluggable-sync-adapter-for-all-model-crud">Use Backbone.Sync or write a pluggable sync adapter for all model CRUD</h1>
+<p>I wish I had followed this advice much earlier, instead I did what most people do and just hacked in the creation and saving of models by overriding save(), etc. It’s much better to learn do it the Backbone way and implement a Backbone.Sync plugin. There already are plugins readily available for Postgres, Socket.io, localStorage, Mongo, etc. This leads to more interchangeable code and coding styles, lends itself to cleaner separation and getting familiar with the established backbone APIs and allows you to swap in different persistence engines if you want.</p>
+<h1 id="getters-setters">Getters/Setters</h1>
+<p>I recommend iterating over all the attributes names for your model and using <code>__defineGetter__</code> to make getters for them – that way you can use dot notation, which I find a lot cleaner and more maintainable. But for setting, you typically want to use .set() and consolidate as much as possible by passing multiple attributes to set() at a time, rather than doing separate .set() calls for each one (it’s more performant that way and you have a lot fewer change events to manage).</p>
+<h1 id="collection-fetch-and-collection-comparator">Collection.fetch and Collection.comparator</h1>
+<p><code>Collection.fetch()</code> takes an <code>{update: true}</code> option which is very handy, if you pass a property name string as the comparator, rather than a function, then Backbone Collections will automatically re-sort if necessary, should that property change on a model. If you do pass in a comparator function, beware of wrapping or binding the function you pass in because Backbone’s behavior differs based on the number of arguments the function takes and wrapping/binding the function obscures the number of arguments (see the <a href="http://backbonejs.org/#Collection-comparator">comparator docs</a>).</p>
+<h1 id="read-the-source-step-through-it">Read the Source &amp; Step Through It</h1>
+<p>The one thing that will give you the best understanding of backbone is to read &amp; step through the source. It might seem intimidating at first, but it’s actually comparatively quite short and well-written and designed for readability (unlike the source of jquery &amp; other hefty libraries) – the annotated source is often a good starting point – and is the best path to mastery. If something doesn’t behave as you would expect, the best thing is usually to set a breakpoint and walk through it.</p>
+
+    
+  </article></body></html>

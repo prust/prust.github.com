@@ -1,0 +1,143 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>`this` in Node modules and IIFEs</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+}
+body {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 40em;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+}
+pre > code { color: #666 !important }
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin-bottom: 2px;
+}
+h1 a {
+  color: #666;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: underline;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  text-align: right;
+  background-color: #eee;
+  color: #999;
+  padding: 5px 1em;
+  border-bottom: 1px solid #ccc;
+}
+#header a {
+  color: #999;
+  text-decoration: none;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+div.date {
+  font-style: italic;
+  color: #999;
+}
+a.more {
+  margin-bottom: 1em;
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+  <div id="header"><a href="/">Peter Rust's Dev Blog</a></div><article>
+    <h1><a href=posts/2013-06-23-this-in-node-modules-and-iifes.html>`this` in Node modules and IIFEs</a></h1>
+    <div class="date">July 23, 2013</div>
+    <p>For the past 8 months I&#39;ve been following the convention in Backbone and Underscore and wrapping my modules in an <a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">IIFE</a> and setting a local variable <code>root</code> to whatever <code>this</code> is outside the IIFE:</p>
+<pre><code class="lang-javascript">(function() {
+  var root = this;
+  // body of the module here
+
+}).call(this);
+</code></pre>
+<p>This provides convenient access to the global context in both environments... at least that&#39;s what the Backbone docs said and I believed them. So I was surprised when I set properties on <code>root</code> but didn&#39;t find them available globally in Node. However, being new to Node, I assumed that this was because Node enforced stricter isolation between modules and that <code>global</code> was really a sort of pseudo-global that was just global to the module. Months later I found that different <a href="http://blog.nodejitsu.com/scaling-isomorphic-javascript-code">Isomorphic Javascript</a> frameworks (<a href="https://github.com/airbnb/rendr">airBNB/rendr</a> and <a href="https://github.com/developmentseed/bones">developmentseed/bones</a>) were setting a boolean on the <code>global</code> object to indicate whether the module is running server-side or client-side... and that the global <em>was actually global</em>.</p>
+<p>I had been fooled all this time: the docs were wrong (and <a href="https://github.com/documentcloud/backbone/issues/1751">were corrected</a> shortly after I read them). <code>this</code> inside a module (and, hence, the <code>root</code> variable) does not refer to the <code>global</code> object in Node; it refers to <code>module.exports</code>. <code>this</code> only refers to the <code>global</code> object when it is inside a IIFE (provided the value of <code>this</code> is not overriden via <code>call()</code> or <code>apply()</code>).</p>
+<p>It makes a lot of sense to map both of these (<code>exports</code> and <code>global</code>) to the <code>window</code> object in the browser. The simplest way is to map <code>exports</code> via an argument passed to the IIFE and to map <code>global</code> via a local variable set to <code>this</code>:</p>
+<pre><code class="lang-javascript">(function(exports) {
+  var global = this;
+
+  // body of the module here
+
+})(this);
+</code></pre>
+<p>These two variables can then be used for globals, imports and exports:</p>
+<pre><code class="lang-javascript">(function(exports) {
+  var global = this;
+  var _ = global._ || require(&#39;underscore&#39;); // imports
+  var is_server = global.is_server;
+
+  function Class1() { /* ... */ }
+  function Class2() { /* ... */ }
+
+  // exports
+  exports.Class1 = Class1;
+  exports.Class2 = Class2;
+
+})(this);
+</code></pre>
+<p>There is still one case where it is necessary to fall back on a <code>typeof</code> check for Node-specific code: when you want to export a single class as the entire module:</p>
+<pre><code class="lang-javascript">(function(exports) {
+  var global = this;
+
+  function Class1() { /* ... */ }
+
+  // export Class1 as entire module
+  if (typeof module != &#39;undefined&#39;)
+    module.exports = Class1
+  else
+    global.Class1 = Class1;
+
+})(this);
+</code></pre>
+
+    
+  </article></body></html>

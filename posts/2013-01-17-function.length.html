@@ -1,0 +1,99 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>Function.length</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+}
+body {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 40em;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+}
+pre > code { color: #666 !important }
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin-bottom: 2px;
+}
+h1 a {
+  color: #666;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: underline;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  text-align: right;
+  background-color: #eee;
+  color: #999;
+  padding: 5px 1em;
+  border-bottom: 1px solid #ccc;
+}
+#header a {
+  color: #999;
+  text-decoration: none;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+div.date {
+  font-style: italic;
+  color: #999;
+}
+a.more {
+  margin-bottom: 1em;
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+  <div id="header"><a href="/">Peter Rust's Dev Blog</a></div><article>
+    <h1><a href=posts/2013-01-17-function.length.html>Function.length</a></h1>
+    <div class="date">Feb. 17, 2013</div>
+    <p>Little did I know, but the <code>Function</code> prototype has a <code>length</code> property. This is how Backbone knows whether your <code>comparator</code> function should be treated like a <code>_.sortBy()</code> function (that takes a single argument) or an <code>Array.sort()</code> function (that takes two arguments). Perhaps this is also how mocha knows whether your tests take a <code>done</code> parameter. And here I had assumed they were using <code>Function.toString()</code> and parsing out the parameters, as Prototype&#39;s <a href="http://api.prototypejs.org/language/Function/prototype/argumentNames/">Function.argumentNames()</a> does.</p>
+<p>One repercussion of this is that if you are passing a single-argument function as a <code>comparator</code>, you have to be careful to not <code>.bind()</code> or <code>_.wrap()</code> it, or Backbone will assume it is a two-argument function.</p>
+
+    
+  </article></body></html>

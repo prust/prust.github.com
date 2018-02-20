@@ -4,7 +4,6 @@ tags: [javascript, nodejs, iife, root, backbone, underscore, module]
 author: prust
 layout: post
 ---
-
 For the past 8 months I've been following the convention in Backbone and Underscore and wrapping my modules in an [IIFE](http://benalman.com/news/2010/11/immediately-invoked-function-expression/) and setting a local variable `root` to whatever `this` is outside the IIFE:
 
 ```javascript

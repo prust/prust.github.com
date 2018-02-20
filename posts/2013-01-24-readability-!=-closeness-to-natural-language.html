@@ -1,0 +1,100 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>Readability != closeness-to-natural-language</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+}
+body {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 40em;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+}
+pre > code { color: #666 !important }
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin-bottom: 2px;
+}
+h1 a {
+  color: #666;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: underline;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  text-align: right;
+  background-color: #eee;
+  color: #999;
+  padding: 5px 1em;
+  border-bottom: 1px solid #ccc;
+}
+#header a {
+  color: #999;
+  text-decoration: none;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+div.date {
+  font-style: italic;
+  color: #999;
+}
+a.more {
+  margin-bottom: 1em;
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+  <div id="header"><a href="/">Peter Rust's Dev Blog</a></div><article>
+    <h1><a href=posts/2013-01-24-readability-!=-closeness-to-natural-language.html>Readability != closeness-to-natural-language</a></h1>
+    <div class="date">Feb. 24, 2013</div>
+    <p>I used to equate readability with closeness-to-natural-language, but have found that this does not always ring true. Sometimes a DSL is more readable than it&#39;s natural language equivalent, due to a higher signal-to-noise ratio.</p>
+<p>In my opinion, CSS and HTML fit into this category, along with glob and, in rare cases, regular expressions (whose idea was it to make a DSL where capitalization of things like <code>\w</code> is not only significant, but it <em>negates</em> the meaning?!).</p>
+<p>For example, <code>glob(&#39;*.sql&#39;, ...)</code> is more readable than <code>_.filter(files, function(file) { return _.str.endsWith(file, &#39;.sql&#39;); });</code>. You can just look at <code>glob(&#39;*.sql&#39;, ...)</code> and you know what it means. This ability to glance at it and know its meaning instantly, without needing to read or parse a sentence makes it even more readable than the natural language equivalent, &quot;filter to all the files that end with .sql&quot;.</p>
+
+    
+  </article></body></html>
