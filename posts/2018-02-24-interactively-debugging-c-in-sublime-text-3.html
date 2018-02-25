@@ -1,0 +1,131 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>Interactively debugging C in Sublime Text 3</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+  background-color: #ccc;
+}
+body {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 40em;
+  background-color: white;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+}
+pre > code { color: #666 !important }
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin: 0 0 2px;
+}
+h1 a {
+  color: #666;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: underline;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 1em 5px;
+  border-bottom: 1px solid #999;
+}
+#header a {
+  color: #333;
+  text-decoration: none;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+#header .pull-right {
+  float: right;
+  margin-top: -2px;
+}
+
+div.date {
+  font-style: italic;
+  color: #999;
+}
+a.more {
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+article {
+  padding: 20px;
+  border: 1px solid #999;
+  border-top-width: 0;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+  <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
+    <div class="date">Mar. 24, 2018</div>
+    <h1><a href=posts/2018-02-24-interactively-debugging-c-in-sublime-text-3.html>Interactively debugging C in Sublime Text 3</a></h1>
+    <p>I had a bit of an journey yesterday getting <code>gdb</code>, (an interactive debugger for <code>gcc</code>) compiling and working in Sublime Text 3 (via the SublimeGDB package), so I thought I should document the issues I ran into &amp; what finally worked, for others and perhaps my future self.</p>
+<p>When I first installed the SublimeGDB package and tried to run it, nothing seemed to happen, so I went to <code>View -&gt; Show Console</code> and saw a <code>the directory is invalid</code> error. I googled a bit and ended up following the instructions <a href="https://webcache.googleusercontent.com/search?q=cache:Sx-cz28zDmMJ:https://forum.sublimetext.com/t/sublime-text-3-build-3047-with-sublimegdb/11356+&amp;cd=2&amp;hl=en&amp;ct=clnk&amp;gl=us">here</a> to get it to work: instead of setting the <code>workingdir</code> to <code>${folder:${file}}</code> or <code>${folder:${project_path:your_executable_name}}</code>, as the default settings seem to suggest -- or even <code>~/...</code>, I ended up using an absolute path (<code>&quot;/Users/my-user-name/...</code>) and specifying these other settings in my <code>*.sublime-project</code> file:</p>
+<pre><code>{
+    &quot;folders&quot;:
+    [
+        {
+            &quot;path&quot;: &quot;.&quot;
+        }
+    ],
+    &quot;settings&quot;: {
+        &quot;sublimegdb_commandline&quot;: &quot;gdb --interpreter=mi ./beast&quot;,
+        &quot;sublimegdb_workingdir&quot;: &quot;/Users/prust/repos/beast.c&quot;,
+        &quot;sublimegdb_exec_cmd&quot;: &quot;-exec-run&quot;,
+        &quot;tab_size&quot;: 8,
+        &quot;sublimegdb_i_know_how_to_use_gdb_thank_you_very_much&quot;: true
+    }
+}
+</code></pre><p>Then I got an error about it not being able to find <code>gdb</code> (<code>command not found</code>, I think), which indicated the <code>gdb</code> wasn&#39;t installed on my system. I tried installing it via Homebrew (<code>brew install gdb</code>), which appeared to work, but when I tried to use it, it failed with <a href="https://stackoverflow.com/questions/48847148/cannot-run-gdb-on-macs-terminal-even-after-codesign">this error</a>:</p>
+<pre><code>dyld: Library not loaded: /usr/local/opt/mpfr/lib/libmpfr.6.dylib
+  Referenced from: /usr/local/bin/gdb
+  Reason: image not found
+</code></pre><p>This <code>*.dylib</code> library wasn&#39;t on my machine; I&#39;m guessing (and this is just speculation; I don&#39;t actually know how Homebrew works) that Homebrew installed a pre-compiled version of <code>gdb</code> which depended on a library that existed on the machine it was compiled with, but did not exist on my machine.</p>
+<p>I was able to address this by compiling <code>gdb</code> myself -- first, I downloaded &amp; tried to compile the latest version (8.1) from <a href="http://ftp.gnu.org/gnu/gdb/">http://ftp.gnu.org/gnu/gdb/</a>. There were 150 warnings and 1 error, which was buried in the warnings &amp; I couldn&#39;t find by searching the console because the warnings had the word &quot;error&quot; in them too. Then I downloaded &amp; compiled the previous version (7.12), via running <code>./configure</code> and <code>make</code> and, in spite of a ton of warnings, it compiled! I installed it (I think via <code>sudo make install</code>) and then followed the instructions <a href="https://sourceware.org/gdb/wiki/BuildingOnDarwin">here</a> to generate a CodeSigning certificate on macOS, to configure the OS to always trust the cert and to sign the newly-installed <code>gdb</code> executable with the cert.</p>
+<p>So, after over an hour of wrestling, I was finally able to run the <code>gdb</code> debugger from Sublime. It ran to the breakpoint and then I was able to use the <code>step</code> and <code>next</code> commands to walk through the code. It took about 60 seconds to find &amp; fix the bug in <a href="https://github.com/prust/beast.c">my game</a> (a clone of the classic action/block-pushing game, Beast).</p>
+
+    
+  </article></body></html>
