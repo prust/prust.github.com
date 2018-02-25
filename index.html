@@ -10,11 +10,13 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
+  background-color: #ccc;
 }
 body {
   padding: 0;
   margin: 0 auto;
   max-width: 40em;
+  background-color: white;
 }
 pre {
   margin-left: 1em;
@@ -29,7 +31,7 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin-bottom: 2px;
+  margin: 0 0 2px;
 }
 h1 a {
   color: #666;
@@ -45,13 +47,13 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #eee;
-  color: #999;
-  padding: 5px 1em;
-  border-bottom: 1px solid #ccc;
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 1em 5px;
+  border-bottom: 1px solid #999;
 }
 #header a {
-  color: #999;
+  color: #333;
   text-decoration: none;
 }
 #header a:hover {
@@ -67,7 +69,6 @@ div.date {
   color: #999;
 }
 a.more {
-  margin-bottom: 1em;
   background-color: #eee;
   display: inline-block;
   padding: 0.3em 0.5em;
@@ -89,19 +90,24 @@ blockquote {
 blockquote p {
   margin: 5px 0;
 }
+article {
+  padding: 20px;
+  border: 1px solid #999;
+  border-top-width: 0;
+}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
   <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
-    <h1><a href=posts/2013-06-23-this-in-node-modules-and-iifes.html>`this` in Node modules and IIFEs</a></h1>
     <div class="date">July 23, 2013</div>
+    <h1><a href=posts/2013-06-23-this-in-node-modules-and-iifes.html>`this` in Node modules and IIFEs</a></h1>
     <p>For the past 8 months I&#39;ve been following the convention in Backbone and Underscore and wrapping my modules in an <a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">IIFE</a> and setting a local variable <code>root</code> to whatever <code>this</code> is outside the IIFE:</p>
 
     <a href=posts/2013-06-23-this-in-node-modules-and-iifes.html class="more">Read More...</a><div style="clear: both"></div>
-  </article><hr><article>
-    <h1><a href=posts/2013-05-22-sqlite-having-picks-arbitrary-row.html>SQLite's HAVING clause picks an arbitrary row</a></h1>
+  </article><article>
     <div class="date">June 22, 2013</div>
+    <h1><a href=posts/2013-05-22-sqlite-having-picks-arbitrary-row.html>SQLite's HAVING clause picks an arbitrary row</a></h1>
     <p>Most SQL engines don&#39;t allow non-aggregate expressions in the <code>HAVING</code> clause. For instance, the <a href="http://www.postgresql.org/docs/9.2/static/sql-select.html">Postgres docs</a> state:</p>
 <blockquote>
 <p>Each column referenced in <code>condition</code> must unambiguously reference a grouping column</p>
@@ -114,84 +120,84 @@ it is evaluated with respect to an arbitrarily selected row from the group.</p>
 <p>Perhaps this approach has precedence in other SQL implementations, but I would much prefer a hard fail over an arbitrary result.</p>
 
     
-  </article><hr><article>
-    <h1><a href=posts/2013-04-23-unix-philosophy.html>Unix Philosophy and Node.js</a></h1>
+  </article><article>
     <div class="date">May 23, 2013</div>
+    <h1><a href=posts/2013-04-23-unix-philosophy.html>Unix Philosophy and Node.js</a></h1>
     <p>At Cornerstone, we&#39;ve promoted using and writing &quot;small and sharp&quot; tools for as long as I can remember (influenced by <a href="http://pragprog.com/the-pragmatic-programmer">Andrew Hunt and David Thomas</a>, among others). But I&#39;ve never seen a community take this concept as far as the Node community has. It&#39;s been fun to see substack posting <a href="http://substack.net/many_things">some arguments</a> for this philosophy as well as some <a href="http://substack.net/how_I_write_modules">how-to notes</a> -- and even more fun to see Isaac Schleuter, the gatekeeper / BDFL of node, write a piece on it: <a href="http://blog.izs.me/post/48281998870/unix-philosophy-and-node-js">Unix Philosophy and Node.js</a></p>
 
     
-  </article><hr><article>
-    <h1><a href=posts/2013-03-21-annoying-javascript-caching.html>Annoying Javascript Caching</a></h1>
+  </article><article>
     <div class="date">Apr. 21, 2013</div>
+    <h1><a href=posts/2013-03-21-annoying-javascript-caching.html>Annoying Javascript Caching</a></h1>
     <p>As our team has started to move from web-powered desktop apps to true web apps, we&#39;ve been bit more than once by Chrome caching the javascript files.</p>
 
     <a href=posts/2013-03-21-annoying-javascript-caching.html class="more">Read More...</a><div style="clear: both"></div>
-  </article><hr><article>
-    <h1><a href=posts/2013-02-27-how-to-remove-a-cursor-in-sublime-text.html>How to remove a cursor in Sublime Text</a></h1>
+  </article><article>
     <div class="date">Mar. 27, 2013</div>
+    <h1><a href=posts/2013-02-27-how-to-remove-a-cursor-in-sublime-text.html>How to remove a cursor in Sublime Text</a></h1>
     <p>Sublime Text&#39;s multiple cursor feature (hold down <code>ctrl</code> while clicking to create more cursors) is great -- until you click in the wrong place. Fortunately, it is possible to remove a mis-placed cursor (though not altogether intuitive): hold down <code>alt</code> and use the middle mouse button (or clickable scroll wheel, if you don&#39;t have a middle mouse button) to remove the errant cursor. </p>
 
     
-  </article><hr><article>
-    <h1><a href=posts/2013-02-26-string.substr()-is-not-ecmascript.html>String.substr() is not ECMAScript</a></h1>
+  </article><article>
     <div class="date">Mar. 26, 2013</div>
+    <h1><a href=posts/2013-02-26-string.substr()-is-not-ecmascript.html>String.substr() is not ECMAScript</a></h1>
     <p>I&#39;m not sure why I never noticed before, but <code>String.substr()</code> isn&#39;t actually in the ECMAScript standard. The 3rd edition of the ECMAScript spec does mention it in the non-normative annex in order to &quot;suggest uniforn semantics for such properties without making [them] part of this standard&quot;.</p>
 
     <a href=posts/2013-02-26-string.substr()-is-not-ecmascript.html class="more">Read More...</a><div style="clear: both"></div>
-  </article><hr><article>
-    <h1><a href=posts/2013-02-26-multi-line-strings-are-not-part-of-ecmascript.html>Multi-line strings are not part of ECMAScript</a></h1>
+  </article><article>
     <div class="date">Mar. 26, 2013</div>
+    <h1><a href=posts/2013-02-26-multi-line-strings-are-not-part-of-ecmascript.html>Multi-line strings are not part of ECMAScript</a></h1>
     <p>I&#39;ve always stayed away from multi-line strings, but didn&#39;t realize until today that they aren&#39;t part of the ECMAScript standard:</p>
 
     <a href=posts/2013-02-26-multi-line-strings-are-not-part-of-ecmascript.html class="more">Read More...</a><div style="clear: both"></div>
-  </article><hr><article>
-    <h1><a href=posts/2013-01-24-readability-!=-closeness-to-natural-language.html>Readability != closeness-to-natural-language</a></h1>
+  </article><article>
     <div class="date">Feb. 24, 2013</div>
+    <h1><a href=posts/2013-01-24-readability-!=-closeness-to-natural-language.html>Readability != closeness-to-natural-language</a></h1>
     <p>I used to equate readability with closeness-to-natural-language, but have found that this does not always ring true. Sometimes a DSL is more readable than it&#39;s natural language equivalent, due to a higher signal-to-noise ratio.</p>
 
     <a href=posts/2013-01-24-readability-!=-closeness-to-natural-language.html class="more">Read More...</a><div style="clear: both"></div>
-  </article><hr><article>
-    <h1><a href=posts/2013-01-17-function.length.html>Function.length</a></h1>
+  </article><article>
     <div class="date">Feb. 17, 2013</div>
+    <h1><a href=posts/2013-01-17-function.length.html>Function.length</a></h1>
     <p>Little did I know, but the <code>Function</code> prototype has a <code>length</code> property. This is how Backbone knows whether your <code>comparator</code> function should be treated like a <code>_.sortBy()</code> function (that takes a single argument) or an <code>Array.sort()</code> function (that takes two arguments). Perhaps this is also how mocha knows whether your tests take a <code>done</code> parameter. And here I had assumed they were using <code>Function.toString()</code> and parsing out the parameters, as Prototype&#39;s <a href="http://api.prototypejs.org/language/Function/prototype/argumentNames/">Function.argumentNames()</a> does.</p>
 
     <a href=posts/2013-01-17-function.length.html class="more">Read More...</a><div style="clear: both"></div>
-  </article><hr><article>
-    <h1><a href=posts/2013-01-17-backbone-tips.html>Backbone Tips</a></h1>
+  </article><article>
     <div class="date">Feb. 17, 2013</div>
+    <h1><a href=posts/2013-01-17-backbone-tips.html>Backbone Tips</a></h1>
     <p>A team member asked me for some Backbone tips and, while I don&#39;t profess to be a Backbone guru yet, I have been around the block with Backbone a few times and thought it would be beneficial to share some things I&#39;ve learned.  Please, take what follows with a grain of salt and correct me where you think differently.</p>
 
     <a href=posts/2013-01-17-backbone-tips.html class="more">Read More...</a><div style="clear: both"></div>
-  </article><hr><article>
-    <h1><a href=posts/2013-01-11-jquery-setters-act-as-getters-if-you-pass-undefined----and-break-the-chain.html>jQuery setters act as getters if you pass undefined, breaking jQuery chainability</a></h1>
+  </article><article>
     <div class="date">Feb. 11, 2013</div>
+    <h1><a href=posts/2013-01-11-jquery-setters-act-as-getters-if-you-pass-undefined----and-break-the-chain.html>jQuery setters act as getters if you pass undefined, breaking jQuery chainability</a></h1>
     <p>This code works fine most of the time:</p>
 <pre><code>var link = $(&#39;&lt;a&gt;&#39;).text(this.model.get(&#39;name&#39;));
 </code></pre><p><code>.text()</code>, when used as a setter, returns a reference to the link and you can continue chaining to your heart&#39;s content.</p>
 <p>That is, until <code>this.model.get(‘name’)</code> is <code>undefined</code>. When that happens, jQuery thinks you&#39;re <code>.text()</code> as a getter instead of a setter and <code>link</code> is set to an empty string instead of a jQueryified element -- which breaks subsequent code.</p>
 
     
-  </article><hr><article>
-    <h1><a href=posts/2013-01-10-throw-is-disallowed-in-a-ternary.html>throw is disallowed in a ternary</a></h1>
+  </article><article>
     <div class="date">Feb. 10, 2013</div>
+    <h1><a href=posts/2013-01-10-throw-is-disallowed-in-a-ternary.html>throw is disallowed in a ternary</a></h1>
     <p>I hadn’t realized this before, but <code>throw</code> is a statement -- just like <code>var</code> -- and therefore cannot be used in a ternary or anywhere that requires an expression. So you can’t do this:</p>
 
     <a href=posts/2013-01-10-throw-is-disallowed-in-a-ternary.html class="more">Read More...</a><div style="clear: both"></div>
-  </article><hr><article>
-    <h1><a href=posts/2013-01-10-`this`-is-automatically-set,-even-for-functions-on-object-literals.html>`this` is automatically set, even for functions on object literals</a></h1>
+  </article><article>
     <div class="date">Feb. 10, 2013</div>
+    <h1><a href=posts/2013-01-10-`this`-is-automatically-set,-even-for-functions-on-object-literals.html>`this` is automatically set, even for functions on object literals</a></h1>
     <p>Whenever you use dot notation to call a function that is a property of the object, <code>this</code> is set to that object -- even if it’s a simple object literal:</p>
 
     <a href=posts/2013-01-10-`this`-is-automatically-set,-even-for-functions-on-object-literals.html class="more">Read More...</a><div style="clear: both"></div>
-  </article><hr><article>
-    <h1><a href=posts/2013-01-08-git-urls-in-npm-compare-package.json-versions.html>git URLs in NPM compare package.json versions</a></h1>
+  </article><article>
     <div class="date">Feb. 8, 2013</div>
+    <h1><a href=posts/2013-01-08-git-urls-in-npm-compare-package.json-versions.html>git URLs in NPM compare package.json versions</a></h1>
     <p>The npm <a href="https://npmjs.org/doc/json.html">package.json docs</a> make it sound like you can use git URLs for dependent repos and reference them via a tag, branch-name or commit SHA. While this is technically true, the docs don’t mention that “npm install” will compare the local version of the repository and the remote one (at that tag/branch/commit) and if they are identical, it will assume that nothing needs to be done -- even if the tag/branch/commit URL previously used to pull that repo is different from the current tag/branch/commit.</p>
 
     <a href=posts/2013-01-08-git-urls-in-npm-compare-package.json-versions.html class="more">Read More...</a><div style="clear: both"></div>
-  </article><hr><article>
-    <h1><a href=posts/2013-01-04-replace()-can-take-a-function.html>replace() can take a function</a></h1>
+  </article><article>
     <div class="date">Feb. 4, 2013</div>
+    <h1><a href=posts/2013-01-04-replace()-can-take-a-function.html>replace() can take a function</a></h1>
     <p>I discovered today that <code>String.replace()</code> can take a function as the second argument. I checked the <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.5.4.11">ECMAScript 5.1 reference</a> and it looks like it matches the <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/replace">MDN docs</a> (though it is much less readable, as any good spec should be ;-).</p>
 
     <a href=posts/2013-01-04-replace()-can-take-a-function.html class="more">Read More...</a><div style="clear: both"></div>

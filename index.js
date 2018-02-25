@@ -48,7 +48,7 @@ post_filenames.forEach(function(filename) {
 });
 
 var index_html = genPageTop({title: "Peter's Dev Blog"}) +
-  index_snippets.join('<hr>') +
+  index_snippets.join('') +
   genPageBottom({});
 fs.writeFileSync('index.html', index_html);
 
@@ -65,11 +65,13 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
+  background-color: #ccc;
 }
 body {
   padding: 0;
   margin: 0 auto;
   max-width: 40em;
+  background-color: white;
 }
 pre {
   margin-left: 1em;
@@ -84,7 +86,7 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin-bottom: 2px;
+  margin: 0 0 2px;
 }
 h1 a {
   color: #666;
@@ -100,13 +102,13 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #eee;
-  color: #999;
-  padding: 5px 1em;
-  border-bottom: 1px solid #ccc;
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 1em 5px;
+  border-bottom: 1px solid #999;
 }
 #header a {
-  color: #999;
+  color: #333;
   text-decoration: none;
 }
 #header a:hover {
@@ -122,7 +124,6 @@ div.date {
   color: #999;
 }
 a.more {
-  margin-bottom: 1em;
   background-color: #eee;
   display: inline-block;
   padding: 0.3em 0.5em;
@@ -144,6 +145,11 @@ blockquote {
 blockquote p {
   margin: 5px 0;
 }
+article {
+  padding: 20px;
+  border: 1px solid #999;
+  border-top-width: 0;
+}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
@@ -154,8 +160,8 @@ blockquote p {
 function genPostBody(meta, html, opts) {
   opts = opts || {};
   return `<article>
-    <h1><a href=${meta.url}>${meta.title}</a></h1>
     <div class="date">${meta.date}</div>
+    <h1><a href=${meta.url}>${meta.title}</a></h1>
     ${html}
     ${opts.abbr ? `<a href=${meta.url} class="more">Read More...</a><div style="clear: both"></div>` : ''}
   </article>`;

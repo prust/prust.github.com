@@ -10,11 +10,13 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
+  background-color: #ccc;
 }
 body {
   padding: 0;
   margin: 0 auto;
   max-width: 40em;
+  background-color: white;
 }
 pre {
   margin-left: 1em;
@@ -29,7 +31,7 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin-bottom: 2px;
+  margin: 0 0 2px;
 }
 h1 a {
   color: #666;
@@ -45,13 +47,13 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #eee;
-  color: #999;
-  padding: 5px 1em;
-  border-bottom: 1px solid #ccc;
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 1em 5px;
+  border-bottom: 1px solid #999;
 }
 #header a {
-  color: #999;
+  color: #333;
   text-decoration: none;
 }
 #header a:hover {
@@ -67,7 +69,6 @@ div.date {
   color: #999;
 }
 a.more {
-  margin-bottom: 1em;
   background-color: #eee;
   display: inline-block;
   padding: 0.3em 0.5em;
@@ -89,13 +90,18 @@ blockquote {
 blockquote p {
   margin: 5px 0;
 }
+article {
+  padding: 20px;
+  border: 1px solid #999;
+  border-top-width: 0;
+}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
   <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
-    <h1><a href=posts/2013-01-24-readability-!=-closeness-to-natural-language.html>Readability != closeness-to-natural-language</a></h1>
     <div class="date">Feb. 24, 2013</div>
+    <h1><a href=posts/2013-01-24-readability-!=-closeness-to-natural-language.html>Readability != closeness-to-natural-language</a></h1>
     <p>I used to equate readability with closeness-to-natural-language, but have found that this does not always ring true. Sometimes a DSL is more readable than it&#39;s natural language equivalent, due to a higher signal-to-noise ratio.</p>
 <p>In my opinion, CSS and HTML fit into this category, along with glob and, in rare cases, regular expressions (whose idea was it to make a DSL where capitalization of things like <code>\w</code> is not only significant, but it <em>negates</em> the meaning?!).</p>
 <p>For example, <code>glob(&#39;*.sql&#39;, ...)</code> is more readable than <code>_.filter(files, function(file) { return _.str.endsWith(file, &#39;.sql&#39;); });</code>. You can just look at <code>glob(&#39;*.sql&#39;, ...)</code> and you know what it means. This ability to glance at it and know its meaning instantly, without needing to read or parse a sentence makes it even more readable than the natural language equivalent, &quot;filter to all the files that end with .sql&quot;.</p>

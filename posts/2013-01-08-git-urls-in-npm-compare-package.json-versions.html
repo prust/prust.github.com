@@ -10,11 +10,13 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
+  background-color: #ccc;
 }
 body {
   padding: 0;
   margin: 0 auto;
   max-width: 40em;
+  background-color: white;
 }
 pre {
   margin-left: 1em;
@@ -29,7 +31,7 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin-bottom: 2px;
+  margin: 0 0 2px;
 }
 h1 a {
   color: #666;
@@ -45,13 +47,13 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #eee;
-  color: #999;
-  padding: 5px 1em;
-  border-bottom: 1px solid #ccc;
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 1em 5px;
+  border-bottom: 1px solid #999;
 }
 #header a {
-  color: #999;
+  color: #333;
   text-decoration: none;
 }
 #header a:hover {
@@ -67,7 +69,6 @@ div.date {
   color: #999;
 }
 a.more {
-  margin-bottom: 1em;
   background-color: #eee;
   display: inline-block;
   padding: 0.3em 0.5em;
@@ -89,13 +90,18 @@ blockquote {
 blockquote p {
   margin: 5px 0;
 }
+article {
+  padding: 20px;
+  border: 1px solid #999;
+  border-top-width: 0;
+}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
   <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
-    <h1><a href=posts/2013-01-08-git-urls-in-npm-compare-package.json-versions.html>git URLs in NPM compare package.json versions</a></h1>
     <div class="date">Feb. 8, 2013</div>
+    <h1><a href=posts/2013-01-08-git-urls-in-npm-compare-package.json-versions.html>git URLs in NPM compare package.json versions</a></h1>
     <p>The npm <a href="https://npmjs.org/doc/json.html">package.json docs</a> make it sound like you can use git URLs for dependent repos and reference them via a tag, branch-name or commit SHA. While this is technically true, the docs don’t mention that “npm install” will compare the local version of the repository and the remote one (at that tag/branch/commit) and if they are identical, it will assume that nothing needs to be done -- even if the tag/branch/commit URL previously used to pull that repo is different from the current tag/branch/commit.</p>
 <p>For instance, if your main repo depends on “my-sub-repo#master” and you change it to “my-sub-repo#new-feature” and don’t change the version in package.json on the new-feature branch, “npm install” will do nothing. You have to change the version on that branch to something like “1.1.0-new-feature.1″ and then “npm install” will realize that it different from what was previously downloaded (“master”) and will update it.</p>
 

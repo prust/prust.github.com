@@ -10,11 +10,13 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
+  background-color: #ccc;
 }
 body {
   padding: 0;
   margin: 0 auto;
   max-width: 40em;
+  background-color: white;
 }
 pre {
   margin-left: 1em;
@@ -29,7 +31,7 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin-bottom: 2px;
+  margin: 0 0 2px;
 }
 h1 a {
   color: #666;
@@ -45,13 +47,13 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #eee;
-  color: #999;
-  padding: 5px 1em;
-  border-bottom: 1px solid #ccc;
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 1em 5px;
+  border-bottom: 1px solid #999;
 }
 #header a {
-  color: #999;
+  color: #333;
   text-decoration: none;
 }
 #header a:hover {
@@ -67,7 +69,6 @@ div.date {
   color: #999;
 }
 a.more {
-  margin-bottom: 1em;
   background-color: #eee;
   display: inline-block;
   padding: 0.3em 0.5em;
@@ -89,13 +90,18 @@ blockquote {
 blockquote p {
   margin: 5px 0;
 }
+article {
+  padding: 20px;
+  border: 1px solid #999;
+  border-top-width: 0;
+}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
   <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
-    <h1><a href=posts/2013-02-26-string.substr()-is-not-ecmascript.html>String.substr() is not ECMAScript</a></h1>
     <div class="date">Mar. 26, 2013</div>
+    <h1><a href=posts/2013-02-26-string.substr()-is-not-ecmascript.html>String.substr() is not ECMAScript</a></h1>
     <p>I&#39;m not sure why I never noticed before, but <code>String.substr()</code> isn&#39;t actually in the ECMAScript standard. The 3rd edition of the ECMAScript spec does mention it in the non-normative annex in order to &quot;suggest uniforn semantics for such properties without making [them] part of this standard&quot;.</p>
 <p>There are already two methods in the standard that do essentially the same thing, <code>String.slice()</code> and <code>String.substring()</code>. My preference is <code>String.slice()</code> because it supports negative indexes, doesn&#39;t have confusing argument-swapping behavior (&quot;if indexA is larger than indexB, then the effect of substring is as if the two arguments were swapped&quot;) and its API is similar to <code>.slice()</code> for Arrays and string slicing in other languages.</p>
 
