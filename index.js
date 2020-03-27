@@ -30,7 +30,7 @@ post_filenames.forEach(function(filename) {
   if (!matches)
     throw new Error('Filename does not begin with YYYY-MM-DD: ' + filename);
 
-  meta.date = months[parseInt(matches[2])] + ' ' + parseInt(matches[3]) + ', ' + matches[1];
+  meta.date = months[parseInt(matches[2])-1] + ' ' + parseInt(matches[3]) + ', ' + matches[1];
   meta.url = 'posts/' + html_filename;
 
   var markdown = contents.slice(second_ix + '---'.length);
@@ -65,12 +65,15 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
-  background-color: #ccc;
+  background-color: #eee;
+  font-size: larger;
+  line-height: 140%;
 }
 body {
   padding: 0;
   margin: 0 auto;
-  max-width: 40em;
+  width: 90%;
+  max-width: 50em;
   background-color: white;
 }
 pre {
@@ -78,8 +81,11 @@ pre {
   padding: 0.5em 1em;
   border-left: 1px solid #ccc;
   background-color: #eee;
+  line-height: 120%;
 }
-pre > code { color: #666 !important }
+pre > code {
+  color: #666 !important
+}
 code {
   color: red;
   background-color: #eee;
@@ -102,10 +108,9 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #ccc;
+  background-color: #eee;
   color: #333;
   padding: 10px 1em 5px;
-  border-bottom: 1px solid #999;
 }
 #header a {
   color: #333;
@@ -147,8 +152,7 @@ blockquote p {
 }
 article {
   padding: 20px;
-  border: 1px solid #999;
-  border-top-width: 0;
+  border-bottom: 20px solid #eee;
 }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">

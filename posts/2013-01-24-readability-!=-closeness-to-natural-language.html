@@ -10,12 +10,15 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
-  background-color: #ccc;
+  background-color: #eee;
+  font-size: larger;
+  line-height: 140%;
 }
 body {
   padding: 0;
   margin: 0 auto;
-  max-width: 40em;
+  width: 90%;
+  max-width: 50em;
   background-color: white;
 }
 pre {
@@ -23,8 +26,11 @@ pre {
   padding: 0.5em 1em;
   border-left: 1px solid #ccc;
   background-color: #eee;
+  line-height: 120%;
 }
-pre > code { color: #666 !important }
+pre > code {
+  color: #666 !important
+}
 code {
   color: red;
   background-color: #eee;
@@ -47,10 +53,9 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #ccc;
+  background-color: #eee;
   color: #333;
   padding: 10px 1em 5px;
-  border-bottom: 1px solid #999;
 }
 #header a {
   color: #333;
@@ -92,15 +97,14 @@ blockquote p {
 }
 article {
   padding: 20px;
-  border: 1px solid #999;
-  border-top-width: 0;
+  border-bottom: 20px solid #eee;
 }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
   <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
-    <div class="date">Feb. 24, 2013</div>
+    <div class="date">Jan. 24, 2013</div>
     <h1><a href=posts/2013-01-24-readability-!=-closeness-to-natural-language.html>Readability != closeness-to-natural-language</a></h1>
     <p>I used to equate readability with closeness-to-natural-language, but have found that this does not always ring true. Sometimes a DSL is more readable than it&#39;s natural language equivalent, due to a higher signal-to-noise ratio.</p>
 <p>In my opinion, CSS and HTML fit into this category, along with glob and, in rare cases, regular expressions (whose idea was it to make a DSL where capitalization of things like <code>\w</code> is not only significant, but it <em>negates</em> the meaning?!).</p>

@@ -10,12 +10,15 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
-  background-color: #ccc;
+  background-color: #eee;
+  font-size: larger;
+  line-height: 140%;
 }
 body {
   padding: 0;
   margin: 0 auto;
-  max-width: 40em;
+  width: 90%;
+  max-width: 50em;
   background-color: white;
 }
 pre {
@@ -23,8 +26,11 @@ pre {
   padding: 0.5em 1em;
   border-left: 1px solid #ccc;
   background-color: #eee;
+  line-height: 120%;
 }
-pre > code { color: #666 !important }
+pre > code {
+  color: #666 !important
+}
 code {
   color: red;
   background-color: #eee;
@@ -47,10 +53,9 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #ccc;
+  background-color: #eee;
   color: #333;
   padding: 10px 1em 5px;
-  border-bottom: 1px solid #999;
 }
 #header a {
   color: #333;
@@ -92,15 +97,14 @@ blockquote p {
 }
 article {
   padding: 20px;
-  border: 1px solid #999;
-  border-top-width: 0;
+  border-bottom: 20px solid #eee;
 }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
   <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
-    <div class="date">Feb. 4, 2013</div>
+    <div class="date">Jan. 4, 2013</div>
     <h1><a href=posts/2013-01-04-replace()-can-take-a-function.html>replace() can take a function</a></h1>
     <p>I discovered today that <code>String.replace()</code> can take a function as the second argument. I checked the <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.5.4.11">ECMAScript 5.1 reference</a> and it looks like it matches the <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String/replace">MDN docs</a> (though it is much less readable, as any good spec should be ;-).</p>
 <p>The arguments passed to the function begin with <code>match</code> (the matched substring), followed by one argument for each regex capture group, followed by <code>offset</code> (the offset of the matched substring), and finally <code>string</code> (the entire string).</p>

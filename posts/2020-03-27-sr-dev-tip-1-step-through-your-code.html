@@ -1,0 +1,137 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>Sr. Dev Tip 1: Step through your code</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+  background-color: #eee;
+  font-size: larger;
+  line-height: 140%;
+}
+body {
+  padding: 0;
+  margin: 0 auto;
+  width: 90%;
+  max-width: 50em;
+  background-color: white;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+  line-height: 120%;
+}
+pre > code {
+  color: #666 !important
+}
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin: 0 0 2px;
+}
+h1 a {
+  color: #666;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: underline;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  background-color: #eee;
+  color: #333;
+  padding: 10px 1em 5px;
+}
+#header a {
+  color: #333;
+  text-decoration: none;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+#header .pull-right {
+  float: right;
+  margin-top: -2px;
+}
+
+div.date {
+  font-style: italic;
+  color: #999;
+}
+a.more {
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+article {
+  padding: 20px;
+  border-bottom: 20px solid #eee;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+  <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
+    <div class="date">Mar. 27, 2020</div>
+    <h1><a href=posts/2020-03-27-sr-dev-tip-1-step-through-your-code.html>Sr. Dev Tip 1: Step through your code</a></h1>
+    <p>I believe that if you want to be on a track to becoming a <a href="https://softwareengineering.stackexchange.com/questions/14914/whats-the-difference-between-entry-level-jr-sr-developers">senior developer</a>, the first habit you should adopt is the use of the interactive debugger. It pains me to see developers default to print debugging and to only reach for the interactive debugger as a last resort, if at all.</p>
+<h1 id="step-through-all-newly-written-code">Step through all newly-written code</h1>
+<p>Every developer should self-review their own code and the most thorough way to review code is to step through it. This habit has been instrumental in my own growth as a programmer and I believe it will be instrumental in helping other developers on their journey towards becoming an intermediate or senior developer.</p>
+<p>Many developers will bristle at this suggestion, but the truth is:</p>
+<ol>
+<li>Almost all newly-written code has bugs, no matter how good you are</li>
+<li>The most efficient way to find and fix these bugs is by stepping through the code in an interactive debugger</li>
+</ol>
+<p>Sometimes it <em>feels</em> more efficient to just run the code and wait for an error to be thrown or for erroneous behavior to present itself. After all, that is the quickest way to see what errors will be generated. But stepping through new code is a more efficient way to find and fix the source of the errors because it often:</p>
+<ul>
+<li>helps you see the root issue more quickly (errors that are thrown are often symptoms, but not the root cause)</li>
+<li>helps you see multiple issues at a time</li>
+<li>helps you see other issues and edge cases that were not directly encountered in the first run</li>
+</ul>
+<p>I will readily admit that sometimes — perhaps the majority of the time — you will run the code, see an error message, and know immediately what the root issue is. But the real problem is the tricky bugs, the 20% of the bugs that take 80% of your time. Unfortunately, it&#39;s usually not obvious at first whether the bug you are facing is in this category. If you habitually use the interactive debugger, you will find these tricky bugs much faster and your overall development time will be reduced.</p>
+<p>There is another benefit to stepping through new code, but it is more of a long-term advantage. The repetition of &quot;helps you see&quot; in the 3 bullet points above is not accidental: the interactive debugger gives you an incisive view into your program, allowing you to see the data as it flows through your code. This reinforces your mental model of the code and the data, which is perhaps even more valuable than quickly fixing the immediate issues.</p>
+<h1 id="the-interactive-debugger-should-be-your-first-tool-of-choice">The Interactive Debugger should be your first tool of choice</h1>
+<p>Most developers know from experience that print debugging (also known as &quot;printf debugging&quot; or &quot;console debugging&quot;) can be hit-or-miss. Sometimes you are able to guess the right values to print at the right times. But often it takes two or three passes in order to zero in on the problem.</p>
+<p>Interactive debugging requires a little more up-front setup (in Node you have to pass <code>--inspect-brk</code>, open Chrome to <code>chrome://inspect</code>, and click the &quot;inspect&quot; link), but if you do use it habitually, it takes 10 or 15 seconds the first time and much less subsequent times.</p>
+<p>In return for this up-front investment, you can hover over any variable to see what it is, you can put variables in the watch window for easier access, you can watch more variables at runtime, you can see exactly which branches are being taken, you can set breakpoints and conditional breakpoints, etc.</p>
+<p>I think the main reluctance is due to the up-front work involved and the natural misplaced optimism that &quot;I won&#39;t need it this time&quot;. Like gambling, occasional quick wins can reinforce the idea that working off of error messages and print statements is all you need, and that the debugger is overkill. But I have found that the habit of stepping through new code and turning to the debugger as the first tool of choice is well worth the effort.</p>
+<p>Steve Maguire, who was involved in Microsoft&#39;s efforts to get bug counts down to manageable levels after having to cancel a product due to a runaway bug list, writes this in <a href="http://writingsolidcode.com">Writing Solid Code</a>:</p>
+<blockquote>
+<p>I don&#39;t know many programmers who consistently write bug-free code, but the few I do know habitually step through all of their code.</p>
+</blockquote>
+<p>If you are hungry for more career advice, the best book I&#39;ve found to help junior developers on their journey to becoming intermediate developers is <a href="https://pragprog.com/book/tpp20/the-pragmatic-programmer-20th-anniversary-edition">The Pragmatic Programmer</a>, and the best book I&#39;ve found to help intermediate developers become senior developers is <a href="http://writingsolidcode.com">Writing Solid Code</a>, which has an excellent chapter on stepping through your code.</p>
+
+    
+  </article></body></html>
