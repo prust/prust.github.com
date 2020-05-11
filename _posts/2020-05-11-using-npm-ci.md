@@ -18,6 +18,6 @@ That sentence raises questions for me. How exactly is `npm install` less strict?
 Therefore, I am going to try to do the following:
 * use `npm ci` when doing a fresh install (no previous node_modules folder)
 * use `npm ci` whenever I'm doing a major branch change or going far back in history
-* use `npm ci` if I haven't run it in a week or more (but not daily because its slower than incremental npm installs)
+* use `npm ci` if I haven't run it in a week or more (but not daily because it's slower than incremental npm installs)
 * examine package-lock.json diffs when they happen to better understand what `npm install` is doing
 * use `npm ci` in all CI environments and deploy scripts
