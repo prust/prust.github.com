@@ -1,0 +1,130 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>Using npm ci</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+  background-color: #eee;
+  font-size: larger;
+  line-height: 140%;
+}
+body {
+  padding: 0;
+  margin: 0 auto;
+  width: 90%;
+  max-width: 50em;
+  background-color: white;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+  line-height: 120%;
+}
+pre > code {
+  color: #666 !important
+}
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin: 0 0 2px;
+}
+h1 a {
+  color: #666;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: underline;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  background-color: #eee;
+  color: #333;
+  padding: 10px 1em 5px;
+}
+#header a {
+  color: #333;
+  text-decoration: none;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+#header .pull-right {
+  float: right;
+  margin-top: -2px;
+}
+
+div.date {
+  font-style: italic;
+  color: #999;
+}
+a.more {
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+article {
+  padding: 20px;
+  border-bottom: 20px solid #eee;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+  <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
+    <div class="date">May 11, 2020</div>
+    <h1><a href=posts/2020-05-11-using-npm-ci.html>Using npm ci</a></h1>
+    <p>According to the docs on <a href="https://docs.npmjs.com/files/package-locks">npm package locks</a>, the presence of <code>package-lock.json</code> is supposed to mean that npm install will recreate the exact same node_modules structure and will not make changes to <code>package-lock.json</code>:</p>
+<blockquote>
+<p>The presence of a package lock changes the installation behavior such that:</p>
+<ol>
+<li>The module tree described by the package lock is reproduced. This means reproducing the structure described in the file, using the specific files referenced in “resolved” if available, falling back to normal package resolution using “version” if one isn’t.</li>
+<li>The tree is walked and any missing dependencies are installed in the usual fashion.</li>
+</ol>
+</blockquote>
+<p>But in practice I have found there are often differences, like versions of npm that <a href="https://stackoverflow.com/questions/47638381/why-did-package-lock-json-change-the-integrity-hash-from-sha1-to-sha512">change the hash from sha1 to sha512</a> or de-duplicate a dependency via changing its position in the hierarchy. I have a feeling that I&#39;ve caught it making changes to versions of packages, but perhaps that&#39;s just paranoia and didn&#39;t actually happen. At any rate, I have a subtle-yet-disturbing sense that using <code>npm install</code> incrementally does not consistently create reproducible builds.</p>
+<p>The other factor that reinforced this unsettled feeling is the fact that npm introduced a new command, <a href="https://docs.npmjs.com/cli/ci.html">npm ci</a>, which is for when &quot;you want to make sure you’re doing a clean install of your dependencies&quot;. What does &quot;clean&quot; mean? Not simply that it deletes <code>/node_modules/</code> and starts over (eventually resulting in the same reproducible build that npm install would have produced), but rather that it &quot;is more strict than a regular install, which can help catch errors or inconsistencies caused by the incrementally-installed local environments of most npm users&quot;.</p>
+<p>That sentence raises questions for me. How exactly is <code>npm install</code> less strict? How can <code>npm install</code>, when used incrementally, create &quot;errors or inconsistencies&quot;? And what do they mean by &quot;incrementally-installed local environments&quot;? In my understanding it is the <em>modules</em> that are installed incrementally, not environments. Are they referring to the build chain used to install native modules? Unfortunately, the blog post <a href="https://blog.npmjs.org/post/171556855892/introducing-npm-ci-for-faster-more-reliable">introducing npm ci</a> doesn&#39;t answer these questions, it just adds to the vague impression that <code>npm install</code> should not be depended on to create reproducible builds.</p>
+<p>Therefore, I am going to try to do the following:</p>
+<ul>
+<li>use <code>npm ci</code> when doing a fresh install (no previous node_modules folder)</li>
+<li>use <code>npm ci</code> whenever I&#39;m doing a major branch change or going far back in history</li>
+<li>use <code>npm ci</code> if I haven&#39;t run it in a week or more (but not daily because its slower than incremental npm installs)</li>
+<li>examine package-lock.json diffs when they happen to better understand what <code>npm install</code> is doing</li>
+<li>use <code>npm ci</code> in all CI environments and deploy scripts</li>
+</ul>
+
+    
+  </article></body></html>
