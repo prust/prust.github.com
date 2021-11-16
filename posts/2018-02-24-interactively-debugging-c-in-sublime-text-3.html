@@ -10,15 +10,13 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
-  background-color: #eee;
+  background-color: white;
   font-size: larger;
   line-height: 140%;
 }
 body {
   padding: 0;
-  margin: 0 auto;
-  width: 90%;
-  max-width: 50em;
+  margin: 0;
   background-color: white;
 }
 pre {
@@ -37,14 +35,16 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin: 0 0 2px;
+  margin: -7px 0 2px;
 }
 h1 a {
-  color: #666;
+  color: #333;
   text-decoration: none;
+  font-size: 16pt;
 }
 h1 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  color: #dd0000;
 }
 hr {
   height: 1px;
@@ -53,13 +53,38 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #eee;
-  color: #333;
-  padding: 10px 1em 5px;
+  color: white;
+  background-image: url('/dev-blog.jpg');
+  background-color: black;
+  background-size: 1024px;
+  height: 314px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 0;
+
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
-#header a {
-  color: #333;
+#header p {
+  padding: 10px
+}
+.title {
+  margin: 0;
+  padding: 5px 20px;
+  color: white;
+  background-color: #dd0000;
+  font-size: 30px;
+  line-height: 110%;
+  text-shadow: 1px 1px 2px #333;
+}
+.title a {
+  color: white;
   text-decoration: none;
+}
+.nav-bar {
+  background-color: #dd0000;
+  height: 14px;
 }
 #header a:hover {
   text-decoration: underline;
@@ -71,7 +96,10 @@ hr {
 
 div.date {
   font-style: italic;
-  color: #999;
+  color: #a7a7a7;
+  font-size: 11pt;
+  float: left;
+  margin-right: 5px;
 }
 a.more {
   background-color: #eee;
@@ -95,17 +123,56 @@ blockquote {
 blockquote p {
   margin: 5px 0;
 }
-article {
-  padding: 20px;
-  border-bottom: 20px solid #eee;
+#articles {
+  margin: 50px 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-gap: 1rem;
 }
+article {
+  padding: 10px;
+  margin: 0;
+  background-color: white;
+  border: 3px solid #ddd;
+  border-width: 0 0 0 3px;
+}
+
+.article-top {
+  overflow: hidden
+}
+article .tags {
+  font-size: 8pt;
+}
+article .tags span {
+  background-color: #b9b9b9;
+  color: white;
+  border-radius: 3px;
+  padding: 1px 5px 0;
+}
+article .subhead {
+  font-size: 12pt;
+  color: #333;
+}
+
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
-  <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
+<p class="title" href="/"><a href="/">Peter's Dev Blog</a></p>
+  <div id="header">
+    <p></p>
+    <p>Insight and tips from 20 years of software development.</p>
+  </div>
+  <div class="nav-bar"></div>
+  <div id="articles">
+  <article>
+  <div class="article-top">
     <div class="date">Feb. 24, 2018</div>
-    <h1><a href=posts/2018-02-24-interactively-debugging-c-in-sublime-text-3.html>Interactively debugging C in Sublime Text 3</a></h1>
+    <div class="tags"><span>C</span> <span>GDB</span> <span>SUBLIME TEXT</span></div>
+  </div>  
+  <h1><a href=posts/2018-02-24-interactively-debugging-c-in-sublime-text-3.html>Interactively debugging C in Sublime Text 3</a></h1>
+  <div class="subhead">Stepping through C code.</div>
+    
     <p>I had a bit of an journey yesterday getting <code>gdb</code>, (an interactive debugger for <code>gcc</code>) compiling and working in Sublime Text 3 (via the SublimeGDB package), so I thought I should document the issues I ran into &amp; what finally worked, for others and perhaps my future self.</p>
 <p>When I first installed the SublimeGDB package and tried to run it, nothing seemed to happen, so I went to <code>View -&gt; Show Console</code> and saw a <code>the directory is invalid</code> error. I googled a bit and ended up following the instructions <a href="https://webcache.googleusercontent.com/search?q=cache:Sx-cz28zDmMJ:https://forum.sublimetext.com/t/sublime-text-3-build-3047-with-sublimegdb/11356+&amp;cd=2&amp;hl=en&amp;ct=clnk&amp;gl=us">here</a> to get it to work: instead of setting the <code>workingdir</code> to <code>${folder:${file}}</code> or <code>${folder:${project_path:your_executable_name}}</code>, as the default settings seem to suggest -- or even <code>~/...</code>, I ended up using an absolute path (<code>&quot;/Users/my-user-name/...</code>) and specifying these other settings in my <code>*.sublime-project</code> file:</p>
 <pre><code>{
@@ -131,5 +198,4 @@ article {
 <p>I was able to address this by compiling <code>gdb</code> myself -- first, I downloaded &amp; tried to compile the latest version (8.1) from <a href="http://ftp.gnu.org/gnu/gdb/">http://ftp.gnu.org/gnu/gdb/</a>. There were 150 warnings and 1 error, which was buried in the warnings &amp; I couldn&#39;t find by searching the console because the warnings had the word &quot;error&quot; in them too. Then I downloaded &amp; compiled the previous version (7.12), via running <code>./configure</code> and <code>make</code> and, in spite of a ton of warnings, it compiled! I installed it (I think via <code>sudo make install</code>) and then followed the instructions <a href="https://sourceware.org/gdb/wiki/BuildingOnDarwin">here</a> to generate a CodeSigning certificate on macOS, to configure the OS to always trust the cert and to sign the newly-installed <code>gdb</code> executable with the cert.</p>
 <p>So, after over an hour of wrestling, I was finally able to run the <code>gdb</code> debugger from Sublime. It ran to the breakpoint and then I was able to use the <code>step</code> and <code>next</code> commands to walk through the code. It took about 60 seconds to find &amp; fix the bug in <a href="https://github.com/prust/beast.c">my game</a> (a clone of the classic action/block-pushing game, Beast).</p>
 
-    
-  </article></body></html>
+  </article></div><div class="nav-bar"></div></body></html>

@@ -48,27 +48,24 @@ post_filenames.forEach(function (filename) {
     ", " +
     matches[1];
   meta.url = "posts/" + html_filename;
+  meta.tags = (meta.tags || "").split(",");
+  meta.tags = meta.tags.map((tag) =>
+    tag.trim().toUpperCase().replace("[", "").replace("]", "")
+  );
 
   var markdown = contents.slice(second_ix + "---".length);
 
-  var markdown_parts = markdown.split("\n\n");
-  var first_paragraph = markdown_parts[0];
-  var is_abbr =
-    (markdown_parts[1] && markdown_parts[1].trim()) ||
-    (markdown_parts[2] && markdown_parts[2].trim());
-  index_snippets.push(
-    genPostBody(meta, marked(first_paragraph), { abbr: is_abbr })
-  );
+  index_snippets.push(genPostBody(meta, null, { is_homepage: true }));
   var html =
     genPageTop(meta) +
-    genPostBody(meta, marked(markdown)) +
+    genPostBody(meta, marked(markdown), {}) +
     genPageBottom(meta);
 
   fs.writeFileSync("posts/" + html_filename, html);
 });
 
 var index_html =
-  genPageTop({ title: "Peter's Dev Blog" }) +
+  genPageTop({ title: "Peter's Dev Blog", is_homepage: true }) +
   index_snippets.join("") +
   genPageBottom({});
 fs.writeFileSync("index.html", index_html);
@@ -86,15 +83,13 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
-  background-color: #eee;
+  background-color: white;
   font-size: larger;
   line-height: 140%;
 }
 body {
   padding: 0;
-  margin: 0 auto;
-  width: 90%;
-  max-width: 50em;
+  margin: 0;
   background-color: white;
 }
 pre {
@@ -113,14 +108,16 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin: 0 0 2px;
+  margin: -7px 0 2px;
 }
 h1 a {
-  color: #666;
+  color: #333;
   text-decoration: none;
+  font-size: 16pt;
 }
 h1 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  color: #dd0000;
 }
 hr {
   height: 1px;
@@ -129,13 +126,38 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #eee;
-  color: #333;
-  padding: 10px 1em 5px;
+  color: white;
+  background-image: url('/dev-blog.jpg');
+  background-color: black;
+  background-size: 1024px;
+  height: 314px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 0;
+
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
-#header a {
-  color: #333;
+#header p {
+  padding: 10px
+}
+.title {
+  margin: 0;
+  padding: 5px 20px;
+  color: white;
+  background-color: #dd0000;
+  font-size: 30px;
+  line-height: 110%;
+  text-shadow: 1px 1px 2px #333;
+}
+.title a {
+  color: white;
   text-decoration: none;
+}
+.nav-bar {
+  background-color: #dd0000;
+  height: 14px;
 }
 #header a:hover {
   text-decoration: underline;
@@ -147,7 +169,10 @@ hr {
 
 div.date {
   font-style: italic;
-  color: #999;
+  color: #a7a7a7;
+  font-size: 11pt;
+  float: left;
+  margin-right: 5px;
 }
 a.more {
   background-color: #eee;
@@ -171,31 +196,118 @@ blockquote {
 blockquote p {
   margin: 5px 0;
 }
+#articles {
+  margin: 50px 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-gap: 1rem;
+}
 article {
-  padding: 20px;
-  border-bottom: 20px solid #eee;
+  padding: 10px;
+  margin: 0;
+  background-color: white;
+  border: 3px solid #ddd;
+  border-width: 0 0 0 3px;
+}
+${
+  meta.is_homepage
+    ? `
+    article:hover {
+      border-color: #dd0000;
+      color: black;
+      background-color: #eee;
+      }
+      article:hover .date {
+        color: #666;
+      }`
+    : ``
+}
+.article-top {
+  overflow: hidden
+}
+article .tags {
+  font-size: 8pt;
+}
+article .tags span {
+  background-color: #b9b9b9;
+  color: white;
+  border-radius: 3px;
+  padding: 1px 5px 0;
+}
+article .subhead {
+  font-size: 12pt;
+  color: #333;
+}
+${
+  meta.is_homepage
+    ? `iframe {
+        position: absolute !important;
+        right: 46px;
+        margin-top: 20px;
+    } `
+    : ``
 }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
-  <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div>`;
+<p class="title" href="/"><a href="/">Peter's Dev Blog</a></p>
+  <div id="header">
+    <p></p>
+    <p>Insight and tips from 20 years of software development.</p>
+  </div>
+  <div class="nav-bar"></div>
+  <div id="articles">
+  `;
 }
 
 function genPostBody(meta, html, opts) {
   opts = opts || {};
-  return `<article>
-    <div class="date">${meta.date}</div>
-    <h1><a href=${meta.url}>${meta.title}</a></h1>
-    ${html}
-    ${
-      opts.abbr
-        ? `<a href=${meta.url} class="more">Read More...</a><div style="clear: both"></div>`
-        : ""
+
+  // ellide tags in an intelligent way
+  let total_chars = 0;
+  let max_chars = 18;
+
+  let ellided_tags;
+  if (opts.is_homepage) {
+    ellided_tags = [];
+    for (let [ix, tag] of meta.tags.entries()) {
+      total_chars += tag.length + 2; // tack on more for the space between tags
+
+      // truncate the tag if it went over the char limit
+      let is_over_limit = total_chars > max_chars;
+      if (is_over_limit) {
+        tag = tag.slice(0, max_chars - total_chars) + "…";
+      }
+
+      // if we're already over & there are additional tags
+      // replace the final one w/ '…' to indicate there are more and bail
+      if (is_over_limit && ix < meta.tags.length - 1) {
+        ellided_tags.push("…");
+        break;
+      }
+
+      ellided_tags.push(tag);
     }
+  } else {
+    // don't ellide tags if this isn't the homepage
+    ellided_tags = meta.tags;
+  }
+
+  return `<article>
+  <div class="article-top">
+    <div class="date">${meta.date}</div>
+    <div class="tags">${ellided_tags
+      .map((tag) => `<span>${tag}</span>`)
+      .join(" ")}</div>
+  </div>  
+  <h1><a href=${meta.url}>${meta.title}</a></h1>
+  <div class="subhead">${meta.subhead || ""}</div>
+    
+    ${html || ""}
   </article>`;
 }
 
 function genPageBottom(meta) {
-  return `</body></html>`;
+  return `</div><div class="nav-bar"></div></body></html>`;
 }

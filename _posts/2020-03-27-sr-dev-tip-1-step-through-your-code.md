@@ -1,8 +1,10 @@
 ---
-title: Sr. Dev Tip 1: Step through your code
-tags: [Node.js, tips]
+title: Step through your code
+tags: tips
 author: prust
+subhead: Deeper insight outperforms quick wins.
 ---
+
 I believe that if you want to be on a track to becoming a [senior developer](https://softwareengineering.stackexchange.com/questions/14914/whats-the-difference-between-entry-level-jr-sr-developers), the first habit you should adopt is the use of the interactive debugger. It pains me to see developers default to print debugging and to only reach for the interactive debugger as a last resort, if at all.
 
 # Step through all newly-written code
@@ -14,11 +16,11 @@ Many developers will bristle at this suggestion, but the truth is:
 1. Almost all newly-written code has bugs, no matter how good you are
 2. The most efficient way to find and fix these bugs is by stepping through the code in an interactive debugger
 
-Sometimes it *feels* more efficient to just run the code and wait for an error to be thrown or for erroneous behavior to present itself. After all, that is the quickest way to see what errors will be generated. But stepping through new code is a more efficient way to find and fix the source of the errors because it often:
+Sometimes it _feels_ more efficient to just run the code and wait for an error to be thrown or for erroneous behavior to present itself. After all, that is the quickest way to see what errors will be generated. But stepping through new code is a more efficient way to find and fix the source of the errors because it often:
 
-* helps you see the root issue more quickly (errors that are thrown are often symptoms, but not the root cause)
-* helps you see multiple issues at a time
-* helps you see other issues and edge cases that were not directly encountered in the first run
+- helps you see the root issue more quickly (errors that are thrown are often symptoms, but not the root cause)
+- helps you see multiple issues at a time
+- helps you see other issues and edge cases that were not directly encountered in the first run
 
 I will readily admit that sometimes — perhaps the majority of the time — you will run the code, see an error message, and know immediately what the root issue is. But the real problem is the tricky bugs, the 20% of the bugs that take 80% of your time. Unfortunately, it's usually not obvious at first whether the bug you are facing is in this category. If you habitually use the interactive debugger, you will find these tricky bugs much faster and your overall development time will be reduced.
 

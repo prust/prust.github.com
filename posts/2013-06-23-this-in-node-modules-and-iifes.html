@@ -10,15 +10,13 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
-  background-color: #eee;
+  background-color: white;
   font-size: larger;
   line-height: 140%;
 }
 body {
   padding: 0;
-  margin: 0 auto;
-  width: 90%;
-  max-width: 50em;
+  margin: 0;
   background-color: white;
 }
 pre {
@@ -37,14 +35,16 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin: 0 0 2px;
+  margin: -7px 0 2px;
 }
 h1 a {
-  color: #666;
+  color: #333;
   text-decoration: none;
+  font-size: 16pt;
 }
 h1 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  color: #dd0000;
 }
 hr {
   height: 1px;
@@ -53,13 +53,38 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #eee;
-  color: #333;
-  padding: 10px 1em 5px;
+  color: white;
+  background-image: url('/dev-blog.jpg');
+  background-color: black;
+  background-size: 1024px;
+  height: 314px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 0;
+
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
-#header a {
-  color: #333;
+#header p {
+  padding: 10px
+}
+.title {
+  margin: 0;
+  padding: 5px 20px;
+  color: white;
+  background-color: #dd0000;
+  font-size: 30px;
+  line-height: 110%;
+  text-shadow: 1px 1px 2px #333;
+}
+.title a {
+  color: white;
   text-decoration: none;
+}
+.nav-bar {
+  background-color: #dd0000;
+  height: 14px;
 }
 #header a:hover {
   text-decoration: underline;
@@ -71,7 +96,10 @@ hr {
 
 div.date {
   font-style: italic;
-  color: #999;
+  color: #a7a7a7;
+  font-size: 11pt;
+  float: left;
+  margin-right: 5px;
 }
 a.more {
   background-color: #eee;
@@ -95,63 +123,101 @@ blockquote {
 blockquote p {
   margin: 5px 0;
 }
-article {
-  padding: 20px;
-  border-bottom: 20px solid #eee;
+#articles {
+  margin: 50px 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-gap: 1rem;
 }
+article {
+  padding: 10px;
+  margin: 0;
+  background-color: white;
+  border: 3px solid #ddd;
+  border-width: 0 0 0 3px;
+}
+
+.article-top {
+  overflow: hidden
+}
+article .tags {
+  font-size: 8pt;
+}
+article .tags span {
+  background-color: #b9b9b9;
+  color: white;
+  border-radius: 3px;
+  padding: 1px 5px 0;
+}
+article .subhead {
+  font-size: 12pt;
+  color: #333;
+}
+
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
-  <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
+<p class="title" href="/"><a href="/">Peter's Dev Blog</a></p>
+  <div id="header">
+    <p></p>
+    <p>Insight and tips from 20 years of software development.</p>
+  </div>
+  <div class="nav-bar"></div>
+  <div id="articles">
+  <article>
+  <div class="article-top">
     <div class="date">June 23, 2013</div>
-    <h1><a href=posts/2013-06-23-this-in-node-modules-and-iifes.html>`this` in Node modules and IIFEs</a></h1>
+    <div class="tags"><span>JAVASCRIPT</span> <span>NODE.JS</span> <span>IIFE</span></div>
+  </div>  
+  <h1><a href=posts/2013-06-23-this-in-node-modules-and-iifes.html>`this` in Node modules and IIFEs</a></h1>
+  <div class="subhead"></div>
+    
     <p>For the past 8 months I&#39;ve been following the convention in Backbone and Underscore and wrapping my modules in an <a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/">IIFE</a> and setting a local variable <code>root</code> to whatever <code>this</code> is outside the IIFE:</p>
-<pre><code class="lang-javascript">(function() {
+<pre><code class="lang-javascript">(function () {
   var root = this;
   // body of the module here
-
-}).call(this);
+}.call(this));
 </code></pre>
 <p>This provides convenient access to the global context in both environments... at least that&#39;s what the Backbone docs said and I believed them. So I was surprised when I set properties on <code>root</code> but didn&#39;t find them available globally in Node. However, being new to Node, I assumed that this was because Node enforced stricter isolation between modules and that <code>global</code> was really a sort of pseudo-global that was just global to the module. Months later I found that different <a href="http://blog.nodejitsu.com/scaling-isomorphic-javascript-code">Isomorphic Javascript</a> frameworks (<a href="https://github.com/airbnb/rendr">airBNB/rendr</a> and <a href="https://github.com/developmentseed/bones">developmentseed/bones</a>) were setting a boolean on the <code>global</code> object to indicate whether the module is running server-side or client-side... and that the global <em>was actually global</em>.</p>
 <p>I had been fooled all this time: the docs were wrong (and <a href="https://github.com/documentcloud/backbone/issues/1751">were corrected</a> shortly after I read them). <code>this</code> inside a module (and, hence, the <code>root</code> variable) does not refer to the <code>global</code> object in Node; it refers to <code>module.exports</code>. <code>this</code> only refers to the <code>global</code> object when it is inside a IIFE (provided the value of <code>this</code> is not overriden via <code>call()</code> or <code>apply()</code>).</p>
 <p>It makes a lot of sense to map both of these (<code>exports</code> and <code>global</code>) to the <code>window</code> object in the browser. The simplest way is to map <code>exports</code> via an argument passed to the IIFE and to map <code>global</code> via a local variable set to <code>this</code>:</p>
-<pre><code class="lang-javascript">(function(exports) {
+<pre><code class="lang-javascript">(function (exports) {
   var global = this;
 
   // body of the module here
-
 })(this);
 </code></pre>
 <p>These two variables can then be used for globals, imports and exports:</p>
-<pre><code class="lang-javascript">(function(exports) {
+<pre><code class="lang-javascript">(function (exports) {
   var global = this;
-  var _ = global._ || require(&#39;underscore&#39;); // imports
+  var _ = global._ || require(&quot;underscore&quot;); // imports
   var is_server = global.is_server;
 
-  function Class1() { /* ... */ }
-  function Class2() { /* ... */ }
+  function Class1() {
+    /* ... */
+  }
+  function Class2() {
+    /* ... */
+  }
 
   // exports
   exports.Class1 = Class1;
   exports.Class2 = Class2;
-
 })(this);
 </code></pre>
 <p>There is still one case where it is necessary to fall back on a <code>typeof</code> check for Node-specific code: when you want to export a single class as the entire module:</p>
-<pre><code class="lang-javascript">(function(exports) {
+<pre><code class="lang-javascript">(function (exports) {
   var global = this;
 
-  function Class1() { /* ... */ }
+  function Class1() {
+    /* ... */
+  }
 
   // export Class1 as entire module
-  if (typeof module != &#39;undefined&#39;)
-    module.exports = Class1
-  else
-    global.Class1 = Class1;
-
+  if (typeof module != &quot;undefined&quot;) module.exports = Class1;
+  else global.Class1 = Class1;
 })(this);
 </code></pre>
 
-    
-  </article></body></html>
+  </article></div><div class="nav-bar"></div></body></html>

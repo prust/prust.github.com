@@ -10,15 +10,13 @@ html {
   font-family: Palatino;
   padding: 0;
   margin: 0;
-  background-color: #eee;
+  background-color: white;
   font-size: larger;
   line-height: 140%;
 }
 body {
   padding: 0;
-  margin: 0 auto;
-  width: 90%;
-  max-width: 50em;
+  margin: 0;
   background-color: white;
 }
 pre {
@@ -37,14 +35,16 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin: 0 0 2px;
+  margin: -7px 0 2px;
 }
 h1 a {
-  color: #666;
+  color: #333;
   text-decoration: none;
+  font-size: 16pt;
 }
 h1 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  color: #dd0000;
 }
 hr {
   height: 1px;
@@ -53,13 +53,38 @@ hr {
   background-color: #ccc;
 }
 #header {
-  background-color: #eee;
-  color: #333;
-  padding: 10px 1em 5px;
+  color: white;
+  background-image: url('/dev-blog.jpg');
+  background-color: black;
+  background-size: 1024px;
+  height: 314px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 0;
+
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
-#header a {
-  color: #333;
+#header p {
+  padding: 10px
+}
+.title {
+  margin: 0;
+  padding: 5px 20px;
+  color: white;
+  background-color: #dd0000;
+  font-size: 30px;
+  line-height: 110%;
+  text-shadow: 1px 1px 2px #333;
+}
+.title a {
+  color: white;
   text-decoration: none;
+}
+.nav-bar {
+  background-color: #dd0000;
+  height: 14px;
 }
 #header a:hover {
   text-decoration: underline;
@@ -71,7 +96,10 @@ hr {
 
 div.date {
   font-style: italic;
-  color: #999;
+  color: #a7a7a7;
+  font-size: 11pt;
+  float: left;
+  margin-right: 5px;
 }
 a.more {
   background-color: #eee;
@@ -95,25 +123,65 @@ blockquote {
 blockquote p {
   margin: 5px 0;
 }
-article {
-  padding: 20px;
-  border-bottom: 20px solid #eee;
+#articles {
+  margin: 50px 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-gap: 1rem;
 }
+article {
+  padding: 10px;
+  margin: 0;
+  background-color: white;
+  border: 3px solid #ddd;
+  border-width: 0 0 0 3px;
+}
+
+.article-top {
+  overflow: hidden
+}
+article .tags {
+  font-size: 8pt;
+}
+article .tags span {
+  background-color: #b9b9b9;
+  color: white;
+  border-radius: 3px;
+  padding: 1px 5px 0;
+}
+article .subhead {
+  font-size: 12pt;
+  color: #333;
+}
+
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
-  <div id="header"><a class="title" href="/">Peter Rust's Dev Blog</a> <div class="pull-right"><a href="https://twitter.com/prust_dev?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @prust_dev</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div></div><article>
+<p class="title" href="/"><a href="/">Peter's Dev Blog</a></p>
+  <div id="header">
+    <p></p>
+    <p>Insight and tips from 20 years of software development.</p>
+  </div>
+  <div class="nav-bar"></div>
+  <div id="articles">
+  <article>
+  <div class="article-top">
     <div class="date">Mar. 21, 2013</div>
-    <h1><a href=posts/2013-03-21-annoying-javascript-caching.html>Annoying Javascript Caching</a></h1>
+    <div class="tags"><span>JAVASCRIPT</span> <span>NODE.JS</span></div>
+  </div>  
+  <h1><a href=posts/2013-03-21-annoying-javascript-caching.html>Annoying Javascript Caching</a></h1>
+  <div class="subhead"></div>
+    
     <p>As our team has started to move from web-powered desktop apps to true web apps, we&#39;ve been bit more than once by Chrome caching the javascript files.</p>
 <p>Once Chrome has cached your files, the simplest way I&#39;ve found to force Chrome to get the latest of a particular file is to find it in the Network panel, right-click to open it in a new tab and hit Ctrl+F5.</p>
 <p>But it would be even better to tell Chrome to stop. And really, this isn&#39;t Chrome&#39;s fault. It&#39;s the server&#39;s fault, which is sending headers telling Chrome to cache the Javascript.</p>
 <p>If you&#39;re using node&#39;s <code>http-server</code>, the default is a cache header of 1 hour (don&#39;t ask me why). To drop the cache header to 10 seconds, you could send <code>-c10</code>, or to disable caching entirely, send <code>-c-1</code>:</p>
 <pre><code>http-server -c-1
 </code></pre><p>If you&#39;re using the <code>node-static</code> file server, you can turn off caching like this:</p>
-<pre><code class="lang-javascript">var fileServer = new static.Server(&#39;./public&#39;, {&#39;headers&#39;: {&#39;Cache-Control&#39;: &#39;no-cache, must-revalidate&#39;}});
+<pre><code class="lang-javascript">var fileServer = new static.Server(&quot;./public&quot;, {
+  headers: { &quot;Cache-Control&quot;: &quot;no-cache, must-revalidate&quot; },
+});
 </code></pre>
 
-    
-  </article></body></html>
+  </article></div><div class="nav-bar"></div></body></html>

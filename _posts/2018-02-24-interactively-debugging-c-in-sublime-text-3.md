@@ -1,8 +1,10 @@
 ---
 title: Interactively debugging C in Sublime Text 3
-tags: [C, gdb, sublime text]
+tags: C, gdb, sublime text
 author: prust
+subhead: Stepping through C code.
 ---
+
 I had a bit of an journey yesterday getting `gdb`, (an interactive debugger for `gcc`) compiling and working in Sublime Text 3 (via the SublimeGDB package), so I thought I should document the issues I ran into & what finally worked, for others and perhaps my future self.
 
 When I first installed the SublimeGDB package and tried to run it, nothing seemed to happen, so I went to `View -> Show Console` and saw a `the directory is invalid` error. I googled a bit and ended up following the instructions [here](https://webcache.googleusercontent.com/search?q=cache:Sx-cz28zDmMJ:https://forum.sublimetext.com/t/sublime-text-3-build-3047-with-sublimegdb/11356+&cd=2&hl=en&ct=clnk&gl=us) to get it to work: instead of setting the `workingdir` to `${folder:${file}}` or `${folder:${project_path:your_executable_name}}`, as the default settings seem to suggest -- or even `~/...`, I ended up using an absolute path (`"/Users/my-user-name/...`) and specifying these other settings in my `*.sublime-project` file:
