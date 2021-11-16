@@ -162,9 +162,11 @@ hr {
 #header a:hover {
   text-decoration: underline;
 }
-#header .pull-right {
+.title .pull-right {
   float: right;
-  margin-top: -2px;
+  margin-top: 0px;
+  text-shadow: none;
+  font-size: 12pt
 }
 
 div.date {
@@ -251,13 +253,16 @@ ${
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
-<p class="title" href="/"><a href="/">Peter's Dev Blog</a></p>
-  <div id="header">
-    <p></p>
-    <p>Insight and tips from 20 years of software development.</p>
-  </div>
-  <div class="nav-bar"></div>
-  <div id="articles">
+<div class="title">
+  <div class="pull-right"><a href="https://twitter.com/prust_dev"><img src="/twitter-logo.png" style="width: 20px; vertical-align: -2px"> Follow <b>@prust_dev</b></a></div>
+  <a href="/">Peter's Dev Blog</a>
+</div>
+<div id="header">
+  <p></p>
+  <p>Insight and tips from 20 years of software development.</p>
+</div>
+<div class="nav-bar"></div>
+<div id="articles">
   `;
 }
 
