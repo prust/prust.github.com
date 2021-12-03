@@ -71,6 +71,7 @@ var index_html =
 fs.writeFileSync("index.html", index_html);
 
 function genPageTop(meta) {
+  var is_home = meta.is_homepage;
   return `
 <!doctype html>
 <html>
@@ -108,12 +109,12 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin: -7px 0 2px;
+  margin: ${is_home ? "-7px 0 2px" : "20px 0 12px 0"};
 }
 h1 a {
+  font-size: ${is_home ? "16pt" : "50pt"};  
   color: #333;
   text-decoration: none;
-  font-size: 16pt;
 }
 h1 a:hover {
   text-decoration: none;
@@ -218,11 +219,16 @@ ${
       border-color: #dd0000;
       color: black;
       background-color: #eee;
-      }
-      article:hover .date {
-        color: #666;
-      }`
+    }
+    article:hover .date {
+      color: #666;
+    }
+    `
     : ``
+}
+h2 {
+  font-size: 25pt;
+  margin: 50px 0 0 0
 }
 .article-top {
   overflow: hidden
@@ -237,17 +243,9 @@ article .tags span {
   padding: 1px 5px 0;
 }
 article .subhead {
-  font-size: 12pt;
+  font-size: ${is_home ? "12pt" : "18pt"};
   color: #333;
-}
-${
-  meta.is_homepage
-    ? `iframe {
-        position: absolute !important;
-        right: 46px;
-        margin-top: 20px;
-    } `
-    : ``
+  font-style: italic;
 }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">

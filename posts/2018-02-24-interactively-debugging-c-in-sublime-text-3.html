@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
-<title>Interactively debugging C in Sublime Text 3</title>
+<title>How To Interactively Debug C</title>
 <style>
 html {
   font-family: Palatino;
@@ -35,12 +35,12 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin: -7px 0 2px;
+  margin: 20px 0 12px 0;
 }
 h1 a {
+  font-size: 50pt;  
   color: #333;
   text-decoration: none;
-  font-size: 16pt;
 }
 h1 a:hover {
   text-decoration: none;
@@ -139,6 +139,10 @@ article {
   border-width: 0 0 0 3px;
 }
 
+h2 {
+  font-size: 25pt;
+  margin: 50px 0 0 0
+}
 .article-top {
   overflow: hidden
 }
@@ -152,10 +156,10 @@ article .tags span {
   padding: 1px 5px 0;
 }
 article .subhead {
-  font-size: 12pt;
+  font-size: 18pt;
   color: #333;
+  font-style: italic;
 }
-
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
@@ -175,8 +179,8 @@ article .subhead {
     <div class="date">Feb. 24, 2018</div>
     <div class="tags"><span>C</span> <span>GDB</span> <span>SUBLIME TEXT</span></div>
   </div>  
-  <h1><a href=posts/2018-02-24-interactively-debugging-c-in-sublime-text-3.html>Interactively debugging C in Sublime Text 3</a></h1>
-  <div class="subhead">Stepping through C code.</div>
+  <h1><a href=posts/2018-02-24-interactively-debugging-c-in-sublime-text-3.html>How To Interactively Debug C</a></h1>
+  <div class="subhead">Integrating gcc's gdb debugger with Sublime Text via SublimeGDB</div>
     
     <p>I had a bit of an journey yesterday getting <code>gdb</code>, (an interactive debugger for <code>gcc</code>) compiling and working in Sublime Text 3 (via the SublimeGDB package), so I thought I should document the issues I ran into &amp; what finally worked, for others and perhaps my future self.</p>
 <p>When I first installed the SublimeGDB package and tried to run it, nothing seemed to happen, so I went to <code>View -&gt; Show Console</code> and saw a <code>the directory is invalid</code> error. I googled a bit and ended up following the instructions <a href="https://webcache.googleusercontent.com/search?q=cache:Sx-cz28zDmMJ:https://forum.sublimetext.com/t/sublime-text-3-build-3047-with-sublimegdb/11356+&amp;cd=2&amp;hl=en&amp;ct=clnk&amp;gl=us">here</a> to get it to work: instead of setting the <code>workingdir</code> to <code>${folder:${file}}</code> or <code>${folder:${project_path:your_executable_name}}</code>, as the default settings seem to suggest -- or even <code>~/...</code>, I ended up using an absolute path (<code>&quot;/Users/my-user-name/...</code>) and specifying these other settings in my <code>*.sublime-project</code> file:</p>

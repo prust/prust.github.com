@@ -2,7 +2,7 @@
 title: Step through your code
 tags: tips
 author: prust
-subhead: Deeper insight outperforms quick wins.
+subhead: Deeper insight outperforms quick wins
 ---
 
 I believe that if you want to be on a track to becoming a [senior developer](https://softwareengineering.stackexchange.com/questions/14914/whats-the-difference-between-entry-level-jr-sr-developers), the first habit you should adopt is the use of the interactive debugger. It pains me to see developers default to print debugging and to only reach for the interactive debugger as a last resort, if at all.

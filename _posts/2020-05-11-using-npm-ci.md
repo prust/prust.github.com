@@ -2,7 +2,7 @@
 title: Using npm ci
 tags: tips
 author: prust
-subhead: Attempting to create reproducible builds.
+subhead: An alternative to npm install that creates reproducible builds
 ---
 
 According to the docs on [npm package locks](https://docs.npmjs.com/files/package-locks), the presence of `package-lock.json` is supposed to mean that npm install will recreate the exact same node_modules structure and will not make changes to `package-lock.json`:

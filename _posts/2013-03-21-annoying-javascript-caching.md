@@ -1,5 +1,5 @@
 ---
-title: Annoying Javascript Caching
+title: Annoying JavaScript Caching
 tags: [Javascript, node.js]
 author: prust
 ---

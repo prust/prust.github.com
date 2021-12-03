@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
-<title>null behaves differently in SQL</title>
+<title>SQL's odd null handling</title>
 <style>
 html {
   font-family: Palatino;
@@ -35,12 +35,12 @@ code {
   padding: 1px 5px;
 }
 h1 {
-  margin: -7px 0 2px;
+  margin: 20px 0 12px 0;
 }
 h1 a {
+  font-size: 50pt;  
   color: #333;
   text-decoration: none;
-  font-size: 16pt;
 }
 h1 a:hover {
   text-decoration: none;
@@ -139,6 +139,10 @@ article {
   border-width: 0 0 0 3px;
 }
 
+h2 {
+  font-size: 25pt;
+  margin: 50px 0 0 0
+}
 .article-top {
   overflow: hidden
 }
@@ -152,10 +156,10 @@ article .tags span {
   padding: 1px 5px 0;
 }
 article .subhead {
-  font-size: 12pt;
+  font-size: 18pt;
   color: #333;
+  font-style: italic;
 }
-
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
@@ -175,10 +179,10 @@ article .subhead {
     <div class="date">Dec. 2, 2021</div>
     <div class="tags"><span>SQL</span> <span>TIPS</span></div>
   </div>  
-  <h1><a href=posts/2021-12-02-null-behaves-differently-in-sql.html>null behaves differently in SQL</a></h1>
-  <div class="subhead"></div>
+  <h1><a href=posts/2021-12-02-null-behaves-differently-in-sql.html>SQL's odd null handling</a></h1>
+  <div class="subhead">Comparison operators typically yield one of two values; in SQL they yield one of three</div>
     
-    <h3 id="a-broken-validation-query">A Broken Validation Query</h3>
+    <h2 id="a-broken-validation-query">A Broken Validation Query</h2>
 <p>We recently had a bug where child records were getting stripped in a deep-clone operation, but what surprised me more than the bug was that our validation routines hadn&#39;t alerted us to the problem.</p>
 <p>The key part of the validation query boiled down to something like this:</p>
 <pre><code>WHERE child_join.num_records &lt;&gt; num_expected_child_records
@@ -191,7 +195,7 @@ article .subhead {
 ) AS child_join ON child_join.parent_id = parent.id
 
 WHERE child_join.num_records &lt;&gt; num_expected_child_records
-</code></pre><h3 id="understanding-why">Understanding Why</h3>
+</code></pre><h2 id="understanding-why">Understanding Why</h2>
 <p>Why doesn&#39;t <code>null &lt;&gt; num_expected_child_records</code> evaluate to <code>true</code>? It would in JavaScript or Python. But the standard SQL comparison operators handle <code>null</code> differently, as explained in the PostgreSQL docs:</p>
 <blockquote>
 <p>Ordinary comparison operators yield <code>null</code> (signifying “unknown”), not <code>true</code> or <code>false</code>, when either input is <code>null</code>. For example, <code>7 = NULL</code> yields <code>null</code>, as does <code>7 &lt;&gt; NULL</code>.</p>
@@ -199,7 +203,7 @@ WHERE child_join.num_records &lt;&gt; num_expected_child_records
 <p>This means that using <code>NOT</code> in combination with <code>=</code> won&#39;t work either:</p>
 <pre><code>WHERE NOT (child_join.num_records = num_expected_child_records)
 </code></pre><p>In popular dynamic languages like Python and JavaScript, the comparison operators boil everything down to <code>true</code> or <code>false</code>, so that downstream code only has to deal with those two values. But in SQL, comparison operators can return <em>three</em> values: <code>true</code>, <code>false</code> or <code>null</code>. The upshot of this is that a <code>null</code> value will be propagated and can &quot;infect&quot; downstream code if it isn&#39;t handled at one of the layers.</p>
-<h3 id="what-to-do-about-it">What To Do About It</h3>
+<h2 id="what-to-do-about-it">What To Do About It</h2>
 <p>One way to approach this problem is to use an alternative comparison operator. SQL:2003 introduced a new operator that handles <code>null</code> in the same way that Python and JavaScript do: <code>IS (NOT) DISTINCT FROM</code>. So the above <code>WHERE</code> clause would look like this:</p>
 <pre><code>WHERE child_join.num_records IS DISTINCT FROM num_expected_child_records
 </code></pre><p>Note that SQLite does not support this operator. An older way to handle this situation is to use an additional <code>IS (NOT) NULL</code> clause, like this:</p>

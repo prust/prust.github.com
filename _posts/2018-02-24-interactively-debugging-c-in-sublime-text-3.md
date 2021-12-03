@@ -1,8 +1,8 @@
 ---
-title: Interactively debugging C in Sublime Text 3
+title: How To Interactively Debug C
 tags: C, gdb, sublime text
 author: prust
-subhead: Stepping through C code.
+subhead: Integrating gcc's gdb debugger with Sublime Text via SublimeGDB
 ---
 
 I had a bit of an journey yesterday getting `gdb`, (an interactive debugger for `gcc`) compiling and working in Sublime Text 3 (via the SublimeGDB package), so I thought I should document the issues I ran into & what finally worked, for others and perhaps my future self.
