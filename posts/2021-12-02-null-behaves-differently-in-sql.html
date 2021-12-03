@@ -1,0 +1,210 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>null behaves differently in SQL</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+  background-color: white;
+  font-size: larger;
+  line-height: 140%;
+}
+body {
+  padding: 0;
+  margin: 0;
+  background-color: white;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+  line-height: 120%;
+}
+pre > code {
+  color: #666 !important
+}
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin: -7px 0 2px;
+}
+h1 a {
+  color: #333;
+  text-decoration: none;
+  font-size: 16pt;
+}
+h1 a:hover {
+  text-decoration: none;
+  color: #dd0000;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  color: white;
+  background-image: url('/dev-blog.jpg');
+  background-color: black;
+  background-size: 1024px;
+  height: 314px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 0;
+
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+#header p {
+  padding: 10px
+}
+.title {
+  margin: 0;
+  padding: 5px 20px;
+  color: white;
+  background-color: #dd0000;
+  font-size: 30px;
+  line-height: 110%;
+  text-shadow: 1px 1px 2px #333;
+}
+.title a {
+  color: white;
+  text-decoration: none;
+}
+.nav-bar {
+  background-color: #dd0000;
+  height: 14px;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+.title .pull-right {
+  float: right;
+  margin-top: 0px;
+  text-shadow: none;
+  font-size: 12pt
+}
+
+div.date {
+  font-style: italic;
+  color: #a7a7a7;
+  font-size: 11pt;
+  float: left;
+  margin-right: 5px;
+}
+a.more {
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+#articles {
+  margin: 50px 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-gap: 1rem;
+}
+article {
+  padding: 10px;
+  margin: 0;
+  background-color: white;
+  border: 3px solid #ddd;
+  border-width: 0 0 0 3px;
+}
+
+.article-top {
+  overflow: hidden
+}
+article .tags {
+  font-size: 8pt;
+}
+article .tags span {
+  background-color: #b9b9b9;
+  color: white;
+  border-radius: 3px;
+  padding: 1px 5px 0;
+}
+article .subhead {
+  font-size: 12pt;
+  color: #333;
+}
+
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+<div class="title">
+  <div class="pull-right"><a href="https://twitter.com/prust_dev"><img src="/twitter-logo.png" style="width: 20px; vertical-align: -2px"> Follow <b>@prust_dev</b></a></div>
+  <a href="/">Peter's Dev Blog</a>
+</div>
+<div id="header">
+  <p></p>
+  <p>Insight and tips from 20 years of software development.</p>
+</div>
+<div class="nav-bar"></div>
+<div id="articles">
+  <article>
+  <div class="article-top">
+    <div class="date">Dec. 2, 2021</div>
+    <div class="tags"><span>SQL</span> <span>TIPS</span></div>
+  </div>  
+  <h1><a href=posts/2021-12-02-null-behaves-differently-in-sql.html>null behaves differently in SQL</a></h1>
+  <div class="subhead"></div>
+    
+    <h3 id="a-broken-validation-query">A Broken Validation Query</h3>
+<p>We recently had a bug where child records were getting stripped in a deep-clone operation, but what surprised me more than the bug was that our validation routines hadn&#39;t alerted us to the problem.</p>
+<p>The key part of the validation query boiled down to something like this:</p>
+<pre><code>WHERE child_join.num_records &lt;&gt; num_expected_child_records
+</code></pre><p>This checks, for each record, whether the number of child records matches what&#39;s expected. But it hadn&#39;t returned anything, even though there were no child records and that clearly wasn&#39;t the expected number.</p>
+<p>When I debugged the problem I found that the value of <code>child_join.num_records</code> was <code>null</code> (as you may have guessed from this post&#39;s title). It was <code>null</code> because it was coming from a <code>COUNT(*)</code> in a joined subquery:</p>
+<pre><code>LEFT JOIN (
+    SELECT COUNT(*) AS num_records
+    FROM child_table
+    GROUP BY parent_id
+) AS child_join ON child_join.parent_id = parent.id
+
+WHERE child_join.num_records &lt;&gt; num_expected_child_records
+</code></pre><h3 id="understanding-why">Understanding Why</h3>
+<p>Why doesn&#39;t <code>null &lt;&gt; num_expected_child_records</code> evaluate to <code>true</code>? It would in JavaScript or Python. But the standard SQL comparison operators handle <code>null</code> differently, as explained in the PostgreSQL docs:</p>
+<blockquote>
+<p>Ordinary comparison operators yield <code>null</code> (signifying “unknown”), not <code>true</code> or <code>false</code>, when either input is <code>null</code>. For example, <code>7 = NULL</code> yields <code>null</code>, as does <code>7 &lt;&gt; NULL</code>.</p>
+</blockquote>
+<p>This means that using <code>NOT</code> in combination with <code>=</code> won&#39;t work either:</p>
+<pre><code>WHERE NOT (child_join.num_records = num_expected_child_records)
+</code></pre><p>In popular dynamic languages like Python and JavaScript, the comparison operators boil everything down to <code>true</code> or <code>false</code>, so that downstream code only has to deal with those two values. But in SQL, comparison operators can return <em>three</em> values: <code>true</code>, <code>false</code> or <code>null</code>. The upshot of this is that a <code>null</code> value will be propagated and can &quot;infect&quot; downstream code if it isn&#39;t handled at one of the layers.</p>
+<h3 id="what-to-do-about-it">What To Do About It</h3>
+<p>One way to approach this problem is to use an alternative comparison operator. SQL:2003 introduced a new operator that handles <code>null</code> in the same way that Python and JavaScript do: <code>IS (NOT) DISTINCT FROM</code>. So the above <code>WHERE</code> clause would look like this:</p>
+<pre><code>WHERE child_join.num_records IS DISTINCT FROM num_expected_child_records
+</code></pre><p>Note that SQLite does not support this operator. An older way to handle this situation is to use an additional <code>IS (NOT) NULL</code> clause, like this:</p>
+<pre><code>WHERE child_join.num_records &lt;&gt; num_expected_child_records AND child_join.num_records IS NOT NULL
+</code></pre><p>But my preferred approach in this situation is to use <code>COALESCE()</code> because I think it most clearly signals the intent to treat a <code>null</code> as equivalent to <code>0</code> records:</p>
+<pre><code>WHERE COALESCE(child_join.num_records, 0) &lt;&gt; num_expected_child_records
+</code></pre>
+  </article></div><div class="nav-bar"></div></body></html>
