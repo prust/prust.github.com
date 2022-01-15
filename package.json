@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/prust/prust.github.com#readme",
   "devDependencies": {
-    "marked": "^0.3.15"
+    "marked": "^4.0.10"
   }
 }
