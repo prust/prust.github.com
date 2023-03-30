@@ -202,7 +202,7 @@ blockquote p {
 #articles {
   margin: 50px 5%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, ${is_home ? '1fr' : '720px'}));
   grid-gap: 1rem;
 }
 article {
