@@ -1,0 +1,200 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>v8's Error.stack gotcha</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+  background-color: white;
+  font-size: larger;
+  line-height: 140%;
+}
+body {
+  padding: 0;
+  margin: 0;
+  background-color: white;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+  line-height: 120%;
+}
+pre > code {
+  color: #666 !important
+}
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin: 20px 0 12px 0;
+}
+h1 a {
+  font-size: 50pt;  
+  color: #333;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: none;
+  color: #dd0000;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  color: white;
+  background-image: url('/dev-blog.jpg');
+  background-color: black;
+  background-size: 1024px;
+  height: 314px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 0;
+
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+#header p {
+  padding: 10px
+}
+.title {
+  margin: 0;
+  padding: 5px 20px;
+  color: white;
+  background-color: #dd0000;
+  font-size: 30px;
+  line-height: 110%;
+  text-shadow: 1px 1px 2px #333;
+}
+.title a {
+  color: white;
+  text-decoration: none;
+}
+.nav-bar {
+  background-color: #dd0000;
+  height: 14px;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+.title .pull-right {
+  float: right;
+  margin-top: 0px;
+  text-shadow: none;
+  font-size: 12pt
+}
+
+div.date {
+  font-style: italic;
+  color: #a7a7a7;
+  font-size: 11pt;
+  float: left;
+  margin-right: 5px;
+}
+a.more {
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+#articles {
+  margin: 50px 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 720px));
+  grid-gap: 1rem;
+}
+article {
+  padding: 10px;
+  margin: 0;
+  background-color: white;
+  border: 3px solid #ddd;
+  border-width: 0 0 0 3px;
+}
+
+h2 {
+  font-size: 25pt;
+  margin: 50px 0 0 0
+}
+.article-top {
+  overflow: hidden
+}
+article .tags {
+  font-size: 8pt;
+}
+article .tags span {
+  background-color: #b9b9b9;
+  color: white;
+  border-radius: 3px;
+  padding: 1px 5px 0;
+}
+article .subhead {
+  font-size: 18pt;
+  color: #333;
+  font-style: italic;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+<div class="title">
+  <div class="pull-right"><a href="https://twitter.com/prust_dev"><img src="/twitter-logo.png" style="width: 20px; vertical-align: -2px"> Follow <b>@prust_dev</b></a></div>
+  <a href="/">Peter's Dev Blog</a>
+</div>
+<div id="header">
+  <p></p>
+  <p>Insight and tips from 20 years of software development.</p>
+</div>
+<div class="nav-bar"></div>
+<div id="articles">
+  <article>
+  <div class="article-top">
+    <div class="date">Mar. 30, 2023</div>
+    <div class="tags"><span>JAVASCRIPT</span> <span>NODE.JS</span> <span>TIPS</span></div>
+  </div>  
+  <h1><a href=posts/2023-03-30-v8-error-stack-gotcha.html>v8's Error.stack gotcha</a></h1>
+  <div class="subhead">v8 caches Error.stack and never invalidates the cache</div>
+    
+    <h2 id="the-problem">The Problem</h2>
+<p>Last week, <a href="https://github.com/tvharris">Travis Harris</a> (a coworker) and I discovered a &quot;gotcha&quot; regarding appending to JavaScript&#39;s Error <code>.message</code> property, and the way that is (and isn&#39;t) reflected in the Error&#39;s <code>.stack</code> property.</p>
+<p>It&#39;s a common and recommended practice to <code>try</code>/<code>catch</code> errors and to append additional context to the error&#39;s <code>.message</code> before re-throwing the error. One very common example is catching a <code>JSON.parse()</code> error and appending to the error message some or all of the string that failed to parse, since this isn&#39;t included in the <code>.message</code> by default. The example I ran into last week was an <code>assert()</code> in a low-level test helper function that was throwing the error, and a <code>try</code>/<code>catch</code> in a higher-level test helper that added context to the error message.</p>
+<p>The problem was, when the assertion failed and the test framework reported the error, <strong>it reported the original error message</strong>, without the added context. This is problematic, since test failures should include as much context as possible (this is especially helpful for debugging intermittent failures or failures that only happen on CI).</p>
+<h2 id="understanding-why">Understanding Why</h2>
+<p>The error message in the test framework output was coming from the error&#39;s <code>.stack</code> property, since it (for convenience, presumably) includes a mashup of both the error message and the stack trace. I assumed that the <code>.stack</code> property was evaluated and set in stone when the Error was created, so I made my code append the extra context to both <code>.message</code> and <code>.stack</code>. This isn&#39;t very helpful, since it&#39;s easy to miss the additional context at the bottom of the stack trace, but I figured it was the most pragmatic solution.</p>
+<p>But in the code review, Travis questioned this, and when I explained my assumption about the behavior of <code>.stack</code>, he showed that I was wrong and that <code>.stack</code> <em>does</em> include an updated <code>.message</code>.</p>
+<p>It took some additional testing and googling to discover the difference between the behavior I was seeing and the behavior Travis was seeing. It turns out that the v8 engine <a href="https://github.com/nodejs/node/issues/13832#issuecomment-309926008">lazily generates the <code>.stack</code> the first time it is accessed and, for performance reasons, caches it</a> for the future, and doesn&#39;t invalidate the cached value when the <code>.message</code> is changed.</p>
+<p>To exacerbate this behavior, Node&#39;s assert() <a href="https://github.com/nodejs/node/blob/v18.15.0/lib/assert.js#L293">accesses the <code>.stack</code></a>, pinning it to its original value.</p>
+<h2 id="tl-dr">TL/DR</h2>
+<ul>
+<li>If you append context to Error messages (you should) and use a test framework that reports the <code>.stack</code> (you probably do), then you should avoid prematurely accessing the <code>.stack</code> in your code and in the libraries you use.</li>
+<li>Chai&#39;s <code>assert()</code> library doesn&#39;t touch the stack and is (mostly?) API compatible with Node&#39;s <code>assert()</code>, so I was able to swap it in, working around the problem.</li>
+</ul>
+
+  </article></div><div class="nav-bar"></div></body></html>
