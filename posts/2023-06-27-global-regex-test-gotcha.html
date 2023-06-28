@@ -1,0 +1,208 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>Global regexes & .test()</title>
+<style>
+html {
+  font-family: Palatino;
+  padding: 0;
+  margin: 0;
+  background-color: white;
+  font-size: larger;
+  line-height: 140%;
+}
+body {
+  padding: 0;
+  margin: 0;
+  background-color: white;
+}
+pre {
+  margin-left: 1em;
+  padding: 0.5em 1em;
+  border-left: 1px solid #ccc;
+  background-color: #eee;
+  line-height: 120%;
+}
+pre > code {
+  color: #666 !important
+}
+code {
+  color: red;
+  background-color: #eee;
+  padding: 1px 5px;
+}
+h1 {
+  margin: 20px 0 12px 0;
+}
+h1 a {
+  font-size: 50pt;  
+  color: #333;
+  text-decoration: none;
+}
+h1 a:hover {
+  text-decoration: none;
+  color: #dd0000;
+}
+hr {
+  height: 1px;
+  color: #ccc;
+  border-width: 0;
+  background-color: #ccc;
+}
+#header {
+  color: white;
+  background-image: url('/dev-blog.jpg');
+  background-color: black;
+  background-size: 1024px;
+  height: 314px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 0;
+
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+#header p {
+  padding: 10px
+}
+.title {
+  margin: 0;
+  padding: 5px 20px;
+  color: white;
+  background-color: #dd0000;
+  font-size: 30px;
+  line-height: 110%;
+  text-shadow: 1px 1px 2px #333;
+}
+.title a {
+  color: white;
+  text-decoration: none;
+}
+.nav-bar {
+  background-color: #dd0000;
+  height: 14px;
+}
+#header a:hover {
+  text-decoration: underline;
+}
+.title .pull-right {
+  float: right;
+  margin-top: 0px;
+  text-shadow: none;
+  font-size: 12pt
+}
+
+div.date {
+  font-style: italic;
+  color: #a7a7a7;
+  font-size: 11pt;
+  float: left;
+  margin-right: 5px;
+}
+a.more {
+  background-color: #eee;
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  color: #666;
+  float: right;
+  text-decoration: none;
+}
+a.more:hover {
+  text-decoration: underline;
+}
+blockquote {
+  font-style: italic;
+  background-color: #eee;
+  margin-left: 1em;
+  padding: 3px 1em;
+  border-left: 1px solid #ccc;
+  color: #666;
+}
+blockquote p {
+  margin: 5px 0;
+}
+#articles {
+  margin: 50px 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 720px));
+  grid-gap: 1rem;
+}
+article {
+  padding: 10px;
+  margin: 0;
+  background-color: white;
+  border: 3px solid #ddd;
+  border-width: 0 0 0 3px;
+}
+
+h2 {
+  font-size: 25pt;
+  margin: 50px 0 0 0
+}
+.article-top {
+  overflow: hidden
+}
+article .tags {
+  font-size: 8pt;
+}
+article .tags span {
+  background-color: #b9b9b9;
+  color: white;
+  border-radius: 3px;
+  padding: 1px 5px 0;
+}
+article .subhead {
+  font-size: 18pt;
+  color: #333;
+  font-style: italic;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+<div class="title">
+  <div class="pull-right"><a href="https://twitter.com/prust_dev"><img src="/twitter-logo.png" style="width: 20px; vertical-align: -2px"> Follow <b>@prust_dev</b></a></div>
+  <a href="/">Peter's Dev Blog</a>
+</div>
+<div id="header">
+  <p></p>
+  <p>Insight and tips from 20 years of software development.</p>
+</div>
+<div class="nav-bar"></div>
+<div id="articles">
+  <article>
+  <div class="article-top">
+    <div class="date">June 27, 2023</div>
+    <div class="tags"><span>JAVASCRIPT</span> <span>TIPS</span></div>
+  </div>  
+  <h1><a href=posts/2023-06-27-global-regex-test-gotcha.html>Global regexes & .test()</a></h1>
+  <div class="subhead">When .test() return true, the .lastIndex doesn't reset, even when testing another string</div>
+    
+    <h2 id="the-problem">The Problem</h2>
+<p>The more I&#39;ve used regular expressions in JavaScript, the more I&#39;ve tended to use the global flag, since this is typically the behavior I want (for example, when doing <code>str.replace(regex)</code> or <code>regex.exec(str)</code>).</p>
+<p>Recently, I created a regex to determine if a SQL statement manipulates the DB (insert/update/delete) or if it&#39;s a simple query (select):</p>
+<pre><code>let is_change_regex = /^INSERT|^UPDATE|^DELETE/gi;
+</code></pre><p>Notice that I included a <code>g</code> flag at the end to make it <code>global</code> out of habit.</p>
+<p>However, when I ran <code>is_change_regex.test(sql)</code> against several <code>DELETE</code> statements, every <em>other</em> one returned <code>true</code>. They are all <code>DELETE</code> statements, so I had expected all of them to return <code>true</code>.</p>
+<h2 id="understanding-why">Understanding Why</h2>
+<p>As usual, MDN gives a clear explanation of what&#39;s going on in the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test#using_test_on_a_regex_with_the_global_flag"><code>RegExp.test()</code> docs</a>:</p>
+<blockquote>
+<p>When a regex has the global flag set, <code>test()</code> will advance the <code>lastIndex</code> of the regex. Further calls to <code>test(str)</code> will resume searching <code>str</code> starting from <code>lastIndex</code>. The <code>lastIndex</code> property will continue to increase each time <code>test()</code> returns <code>true</code>.</p>
+</blockquote>
+<p>Then it highlights the gotcha with a highlighted <strong>Note</strong>:</p>
+<blockquote>
+<p><strong>Note:</strong> As long as <code>test()</code> returns <code>true</code>, <code>lastIndex</code> will <em>not</em> reset — even when testing a different string!</p>
+</blockquote>
+<p>This mostly makes sense when thinking about it from an implementation standpoint. The <code>.lastIndex</code> property is how a <code>global</code> regex can maintain state when replacing something multiple times throughout a string, or when <code>.exec()</code> is called multiple times against the same string. It makes sense that using a <code>global</code> regex with <code>.test()</code> would allow the caller to <code>test()</code> the string multiple times, walking through the string to see how many regex matches there are in it.</p>
+<p>But it&#39;s counter-intuitive that it doesn&#39;t reset the <code>.lastIndex</code> when testing a different string. Perhaps the implementers felt like that was too much magic, or may not be performant.</p>
+<h2 id="tl-dr">TL/DR</h2>
+<ul>
+<li>Unless you&#39;re intentionally calling <code>.test()</code> multiple times with the same string to see how many matches are in the string, you probably don&#39;t want to use <code>.test()</code> with a <code>global</code> regex. It&#39;s best to use a regular regex, to avoid unintuitive behavior.</li>
+<li>It&#39;s probably better to only use <code>global</code> regexes when you know you need them (typically for <code>str.replace(regex)</code> and <code>regex.exec(str)</code>), and to default to regular, non-global regexes.</li>
+</ul>
+
+  </article></div><div class="nav-bar"></div></body></html>
