@@ -36,4 +36,4 @@ But it's counter-intuitive that it doesn't reset the `.lastIndex` when testing a
 ## TL/DR
 
 - Unless you're intentionally calling `.test()` multiple times with the same string to see how many matches are in the string, you probably don't want to use `.test()` with a `global` regex. It's best to use a regular regex, to avoid unintuitive behavior.
-- It's probably better to only use `global` regexes when you know you need them (typically for `str.replace(regex)` and `regex.exec(str)`), and to default to regular, non-global regexes.
+- It's probably better to only use `global` regexes when you know you need them (typically for `str.replace(regex)` and `regex.exec(str)`), and in other cases to default to regular, non-global regexes.
