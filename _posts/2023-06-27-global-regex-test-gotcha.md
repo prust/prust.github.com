@@ -25,13 +25,13 @@ As usual, MDN gives a clear explanation of what's going on in the [`RegExp.test(
 
 > When a regex has the global flag set, `test()` will advance the `lastIndex` of the regex. Further calls to `test(str)` will resume searching `str` starting from `lastIndex`. The `lastIndex` property will continue to increase each time `test()` returns `true`.
 
-Then it highlights the gotcha with a highlighted **Note**:
+Then it highlights the gotcha with a **Note**:
 
 > **Note:** As long as `test()` returns `true`, `lastIndex` will _not_ reset — even when testing a different string!
 
 This mostly makes sense when thinking about it from an implementation standpoint. The `.lastIndex` property is how a `global` regex can maintain state when replacing something multiple times throughout a string, or when `.exec()` is called multiple times against the same string. It makes sense that using a `global` regex with `.test()` would allow the caller to `test()` the string multiple times, walking through the string to see how many regex matches there are in it.
 
-But it's counter-intuitive that it doesn't reset the `.lastIndex` when testing a different string. Perhaps the implementers felt like that was too much magic, or may not be performant.
+But it's counter-intuitive that it doesn't reset the `.lastIndex` when testing a different string. Perhaps the ECMAScript Committee felt like that was too much magic, or may not be performant.
 
 ## TL/DR
 

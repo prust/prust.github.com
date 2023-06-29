@@ -193,12 +193,12 @@ article .subhead {
 <blockquote>
 <p>When a regex has the global flag set, <code>test()</code> will advance the <code>lastIndex</code> of the regex. Further calls to <code>test(str)</code> will resume searching <code>str</code> starting from <code>lastIndex</code>. The <code>lastIndex</code> property will continue to increase each time <code>test()</code> returns <code>true</code>.</p>
 </blockquote>
-<p>Then it highlights the gotcha with a highlighted <strong>Note</strong>:</p>
+<p>Then it highlights the gotcha with a <strong>Note</strong>:</p>
 <blockquote>
 <p><strong>Note:</strong> As long as <code>test()</code> returns <code>true</code>, <code>lastIndex</code> will <em>not</em> reset — even when testing a different string!</p>
 </blockquote>
 <p>This mostly makes sense when thinking about it from an implementation standpoint. The <code>.lastIndex</code> property is how a <code>global</code> regex can maintain state when replacing something multiple times throughout a string, or when <code>.exec()</code> is called multiple times against the same string. It makes sense that using a <code>global</code> regex with <code>.test()</code> would allow the caller to <code>test()</code> the string multiple times, walking through the string to see how many regex matches there are in it.</p>
-<p>But it&#39;s counter-intuitive that it doesn&#39;t reset the <code>.lastIndex</code> when testing a different string. Perhaps the implementers felt like that was too much magic, or may not be performant.</p>
+<p>But it&#39;s counter-intuitive that it doesn&#39;t reset the <code>.lastIndex</code> when testing a different string. Perhaps the ECMAScript Committee felt like that was too much magic, or may not be performant.</p>
 <h2 id="tl-dr">TL/DR</h2>
 <ul>
 <li>Unless you&#39;re intentionally calling <code>.test()</code> multiple times with the same string to see how many matches are in the string, you probably don&#39;t want to use <code>.test()</code> with a <code>global</code> regex. It&#39;s best to use a regular regex, to avoid unintuitive behavior.</li>
